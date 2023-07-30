@@ -1,0 +1,31 @@
+{
+  "name": "1x1_trainer",
+  "version": "1.0.0",
+  "description": "1x1 trainer",
+  "main": "src/1x1trainer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imolb/1x1_trainer.git"
+  },
+  "keywords": [
+    "trainer",
+    "1x1"
+  ],
+  "author": "imolb",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/imolb/1x1_trainer/issues"
+  },
+  "homepage": "https://github.com/imolb/1x1_trainer/#readme",
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jsdoc": "^4.0.0"
+  }
+}

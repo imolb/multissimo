@@ -1,0 +1,37 @@
+
+
+
+
+
+      button {
+          background-color: gray;
+          font-size: large;
+      }
+
+      pre {
+          font-size: large;
+      }
+
+
+
+function zufallszahl(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+
+    var neuerInhalt = ''
+    var anzahl = 0
+
+    for (var i=1; i<10; i++){
+        var zahl = zufallszahl(0, 6);
+
+        if (zahl >= 6) {
+            neuerInhalt = neuerInhalt + " Juhu: " + zahl
+            anzahl = anzahl + 1
+        } else {
+            neuerInhalt = neuerInhalt + " Wurf: " + zahl
+        }
+        neuerInhalt = neuerInhalt + "\n"
+    }
+
+    neuerInhalt = neuerInhalt + "Du hast " + anzahl + "x die 6 gewürfelt."
