@@ -1,5 +1,5 @@
 {
-  "name": "Multissimo",
+  "name": "multissimo",
   "version": "1.0.0",
   "description": "Website to train the 1x1 computation",
   "main": "src/multissimo.js",
