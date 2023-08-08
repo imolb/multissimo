@@ -1,25 +1,27 @@
 {
-  "name": "1x1_trainer",
+  "name": "Multissimo",
   "version": "1.0.0",
-  "description": "1x1 trainer",
-  "main": "src/1x1trainer.js",
+  "description": "Website to train the 1x1 computation",
+  "main": "src/multissimo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imolb/1x1_trainer.git"
+    "url": "git+https://github.com/imolb/multissimo.git"
   },
   "keywords": [
+    "multissimo",
+    "multiplication",
     "trainer",
     "1x1"
   ],
   "author": "imolb",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/imolb/1x1_trainer/issues"
+    "url": "https://github.com/imolb/multissimo/issues"
   },
-  "homepage": "https://github.com/imolb/1x1_trainer/#readme",
+  "homepage": "https://github.com/imolb/multissimo/#readme",
   "devDependencies": {
     "eslint": "^8.31.0",
     "eslint-config-standard": "^17.0.0",

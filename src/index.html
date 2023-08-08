@@ -4,24 +4,35 @@
     <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="1x1_trainer.js"></script>
-    <link rel="stylesheet" href="1x1_trainer.css">
+    <script src="multissimo.js"></script>
+    <link rel="stylesheet" href="multissimo.css">
+    <link rel="manifest" href="multissimo.webmanifest" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
-    <title>1x1 Trainer</title>
+    <title>Multissimo</title>
+
+    <!--
+    https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Installable_PWAs
+    https://web.dev/install-criteria/
+    https://developer.chrome.com/blog/a2hs-updates/ -->
 
   </head>
 
   <body>
 
     <main>
-      <h1>1x1 Trainer</h1>
+      <h1>Bestes 1*1</h1>
 
-      <form>
-        <button type="button" id="knopf1">Drück mich</button>
-        <br>
-        <pre><output id="ausgabe"></output></pre>
-
+      <form action="javascript:antwortFunktion()">
+        <output id="punktestatus"></output>
+        <pre><output id="aufgabe"></output></pre>
+        <input type="tel" id="antwort" size="4">
+        <button type="button" id="knopf2">Antwort</button>
+        <pre><output id="bewertung" class="richtig"></output></pre>
+        <pre><output id="zaehler"></output></pre>
       </form>
+
+      <table id="statistik"></table>
     </main>
   </body>
 </html>

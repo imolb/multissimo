@@ -1,0 +1,51 @@
+body {
+    background-color: white;
+}
+
+h1 {
+    color: black;
+    font-size: medium;
+}
+
+#aufgabe {
+    font-size: x-large;
+}
+
+output.richtig {
+    color: green;
+}
+
+output.falsch {
+    color: red;
+}
+
+#statistik {
+    font-size: x-small;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
