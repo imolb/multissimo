@@ -1,161 +1,160 @@
 'use strict'
 
 /**
- * 1x1_trainer.js
+ * multissimo.js
  *
  */
 
-var zahl1 = 0;
-var zahl2 = 0;
-var anzahlGut=0;
-var anzahlSchlecht=0;
+var number1 = 0;
+var number2 = 0;
+var countRight=0;
+var countWrong=0;
 
-var anzahlZeilen = 11;
-var anzahlSpalten = 11;
+var numRows = 11;
+var numCols = 11;
 
-var tabelle = new Array(anzahlZeilen);
+var resultTable = new Array(numRows);
 
 
+function sumTable(table) {
+    var sum = 0;
 
-function summeTabelle() {
-    var summe = 0;
-
-    for (var i=0; i<anzahlZeilen; i++) {
-        for (var j=0; j<anzahlSpalten; j++) {
-            summe = summe + tabelle[i][j];
+    for (var i=0; i<numRows; i++) {
+        for (var j=0; j<numRows; j++) {
+            sum = sum + table[i][j];
         }
     }
 
-    return summe;
+    return sum;
 }
 
-function minMaxTabelle() {
-    var minTabelle = Infinity;
-    var maxTabelle = 0;
+function minMaxTable(table) {
+    var minTable = Infinity;
+    var maxTable = 0;
 
-    for (var i=0; i<anzahlZeilen; i++) {
-        for (var j=0; j<anzahlSpalten; j++) {
-            minTabelle = Math.min(minTabelle, tabelle[i][j]);
-            maxTabelle = Math.max(maxTabelle, tabelle[i][j]);
+    for (var i=0; i<numRows; i++) {
+        for (var j=0; j<numRows; j++) {
+            minTable = Math.min(minTable, table[i][j]);
+            maxTable = Math.max(maxTable, table[i][j]);
         }
     }
 
-    return {min: minTabelle, max: maxTabelle};
+    return {min: minTable, max: maxTable};
 }
 
-function waehleElementAusTabelle(position) {
-    var summe = 0;
+function selectItemFromTable(table, position) {
+    var sum = 0;
 
-    for (var i=0; i<anzahlZeilen; i++) {
-        for (var j=0; j<anzahlSpalten; j++) {
-            summe = summe + tabelle[i][j];
-            if (summe >= position) {
+    for (var i=0; i<numRows; i++) {
+        for (var j=0; j<numCols; j++) {
+            sum = sum + table[i][j];
+            if (sum >= position) {
                 return {i: i, j: j};
             }
         }
     }
 }
 
-function zufallsAufgabe() {
-    var position = Math.floor(Math.random()*summeTabelle());
+function randomTask(table) {
+    var position = Math.floor(Math.random()*sumTable(table));
 
-    var element = waehleElementAusTabelle(position);
+    var element = selectItemFromTable(table, position);
 
-    zahl1 = element.i;
-    zahl2 = element.j;
+    number1 = element.i;
+    number2 = element.j;
 }
 
-function aufgabeStellFunktion () {
-    zufallsAufgabe();
+function askTask () {
+    randomTask(resultTable);
 
-    var aufgabe = zahl1 + " * " + zahl2 + " = ";
+    var taskText = number1 + " * " + number2 + " = ";
 
-    document.querySelector('#aufgabe').textContent = aufgabe;
-    document.querySelector('#antwort').value = "";
-    document.querySelector('#antwort').focus();
-    document.querySelector('#bewertung').textContent = "";
+    document.querySelector('#task').textContent = taskText;
+    document.querySelector('#answer').value = "";
+    document.querySelector('#answer').focus();
+    document.querySelector('#rating').textContent = "";
 }
 
-function antwortFunktion () {
-    var ergebnis = zahl1*zahl2;
-    var ausgabe = zahl1 + " * " + zahl2 + " = " + ergebnis;
-    var antwort = document.querySelector('#antwort').value;
+function sendAnswer () {
+    var correctResult = number1*number2;
+    var taskText = number1 + " * " + number2 + " = " + correctResult;
+    var answer = document.querySelector('#answer').value;
 
-    var bewertung = "";
-    var farbenKlasse = "";
-    if (antwort == ergebnis)  {
-        farbenKlasse = "richtig";
-        anzahlGut =anzahlGut+1;
-        tabelle[zahl1][zahl2] = tabelle[zahl1][zahl2] / 2;
-        ausgabe = ausgabe + " ✔";
+    var ratingText = "";
+    var ratingClass = "";
+    if (answer == correctResult)  {
+        ratingClass = "correct";
+        countRight = countRight+1;
+        resultTable[number1][number2] = resultTable[number1][number2] / 2;
+        taskText = taskText + " ✔";
     } else {
-        farbenKlasse = "falsch";
-        anzahlSchlecht=anzahlSchlecht+1;
-        tabelle[zahl1][zahl2] = tabelle[zahl1][zahl2] * 2;
-        ausgabe = ausgabe + " ❌";
+        ratingClass = "wrong";
+        countWrong=countWrong+1;
+        resultTable[number1][number2] = resultTable[number1][number2] * 2;
+        taskText = taskText + " ❌";
     }
 
-    document.querySelector('#aufgabe').textContent = ausgabe;
-    document.querySelector('#bewertung').setAttribute('class', farbenKlasse);
+    document.querySelector('#task').textContent = taskText;
+    document.querySelector('#rating').setAttribute('class', ratingClass);
 
 
-    ausgabePunkte();
-    anzahlAbspeichern();
-    ausgabeTabelle();
+    showPoints();
+    saveStatus();
+    showTable();
 
-    window.setTimeout(aufgabeStellFunktion, 2000);
+    window.setTimeout(askTask, 2000);
 }
 
-function ausgabePunkte() {
-    var punkte = anzahlGut - anzahlSchlecht;
-    var punktestatus = "🎯 " + punkte +
-                               " (✔️" + anzahlGut + " ❌" + anzahlSchlecht + ") ";
-    var schwellePokale = 1000;
-    var schwelleMedallien = 100;
-    var schwelleSmileys = 10;
+function showPoints() {
+    var countTotal = countRight - countWrong;
+    var pointStatus = "🎯 " + countTotal +
+                               " (✔️" + countRight + " ❌" + countWrong + ") ";
+    var threshold3 = 1000;
+    var threshold2 = 100;
+    var threshold1 = 10;
 
-    var anzahlPokale = Math.floor(punkte / schwellePokale);
-    var anzahlMedallien = Math.floor((punkte - schwellePokale*anzahlPokale) / schwelleMedallien);
-    var anzahlSmileys = Math.floor((punkte - schwellePokale*anzahlPokale - schwelleMedallien*anzahlMedallien) / schwelleSmileys);
+    var won3 = Math.floor(countTotal / threshold3);
+    var won2 = Math.floor((countTotal - threshold3*won3) / threshold2);
+    var won1 = Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1);
 
-    for (var i=1; i<=anzahlSmileys; i++) {
-        punktestatus = punktestatus + "😋";
+    for (var i=1; i<=won1; i++) {
+        pointStatus = pointStatus + "😋";
     }
 
-    for (var i=1; i<=anzahlMedallien; i++) {
-        punktestatus = punktestatus + "🏅";
+    for (var i=1; i<=won2; i++) {
+        pointStatus = pointStatus + "🏅";
     }
 
-    for (var i=1; i<=anzahlPokale; i++) {
-        punktestatus = punktestatus + "🏆";
+    for (var i=1; i<=won3; i++) {
+        pointStatus = pointStatus + "🏆";
     }
 
 
-    document.querySelector('#punktestatus').textContent = punktestatus;
+    document.querySelector('#points').textContent = pointStatus;
 }
 
-const removeChilds = (parent) => {
+const removeChildren = (parent) => {
     while (parent.lastChild) {
         parent.removeChild(parent.lastChild);
     }
 };
 
-function ausgabeTabelle() {
-    var table = document.querySelector('#statistik');
+function showTable() {
+    var table = document.querySelector('#statistic');
 
-    removeChilds(table);
+    removeChildren(table);
 
-    for (var i=-1; i<anzahlZeilen; i++) {
-        var maxMinWert = minMaxTabelle();
+    for (var i=-1; i<numRows; i++) {
+        var maxMinValue = minMaxTable(resultTable);
 
         var tr = document.createElement('tr');
         table.appendChild(tr);
 
-        for (var j=-1; j<anzahlSpalten; j++) {
+        for (var j=-1; j<numCols; j++) {
             if (i >= 0 && j >= 0) {
                 var td = createElementWithText('td', "");
-                td.setAttribute('title', tabelle[i][j]);
-                td.setAttribute('style', 'background-color:'+zellenFarbe(maxMinWert, tabelle[i][j]));
+                td.setAttribute('title', resultTable[i][j]);
+                td.setAttribute('style', 'background-color:'+cellColor(maxMinValue, resultTable[i][j]));
                 tr.appendChild(td);
             } else if (i == -1 && j >= 0) {
                 tr.appendChild(createElementWithText('th', j));
@@ -168,15 +167,15 @@ function ausgabeTabelle() {
     }
 }
 
-function zellenFarbe(maxMinWert, wert) {
-    var anteil;
-    if (maxMinWert.max - maxMinWert.min == 0) {
-        anteil = "50";
+function cellColor(maxMinValue, value) {
+    var partition;
+    if (maxMinValue.max - maxMinValue.min == 0) {
+        partition = "50";
     } else {
-        anteil = (wert - maxMinWert.min)/(maxMinWert.max - maxMinWert.min)*100;
+        partition = (value - maxMinValue.min)/(maxMinValue.max - maxMinValue.min)*100;
     }
-    var farbe = "rgb("+anteil+"% " + (100 - anteil) + "% 50%)";
-    return farbe;
+    var color = "rgb("+partition+"% " + (100 - partition) + "% 50%)";
+    return color;
 }
 
 function createElementWithText(nodeType, text) {
@@ -187,50 +186,50 @@ function createElementWithText(nodeType, text) {
     return node;
 }
 
-function loeschFunktion () {
-    document.querySelector('#aufgabe').textContent = "";
-    document.querySelector('#antwort').value = "";
-    document.querySelector('#antwort').focus();
+function clearForm () {
+    document.querySelector('#task').textContent = "";
+    document.querySelector('#answer').value = "";
+    document.querySelector('#answer').focus();
 
-    document.querySelector('#zaehler').textContent = "richtig: " + anzahlGut + "\nfalsch: " +anzahlSchlecht ;
+    document.querySelector('#counter').textContent = "Correct: " + countRight + "\nWrong: " +countWrong ;
 }
 
-function anzahlAbspeichern () {
-    localStorage.setItem('anzahlGut', anzahlGut);
-    localStorage.setItem('anzahlSchlecht', anzahlSchlecht);
-    localStorage.setItem('tabelle', JSON.stringify(tabelle));
+function saveStatus () {
+    localStorage.setItem('countRight', countRight);
+    localStorage.setItem('countWrong', countWrong);
+    localStorage.setItem('resultTable', JSON.stringify(resultTable));
 }
 
-function anzahlLaden () {
-    anzahlGut = parseInt(localStorage.getItem('anzahlGut'));
-    anzahlSchlecht = parseInt(localStorage.getItem('anzahlSchlecht'));
-    tabelle = JSON.parse(localStorage.getItem('tabelle'));
+function loadStatus () {
+    countRight = parseInt(localStorage.getItem('countRight'));
+    countWrong = parseInt(localStorage.getItem('countWrong'));
+    resultTable = JSON.parse(localStorage.getItem('resultTable'));
 
-    if (isNaN(anzahlGut) || isNaN(anzahlSchlecht)) {
-        anzahlGut = 0;
-        anzahlSchlecht = 0;
+    if (isNaN(countRight) || isNaN(countWrong)) {
+        countRight = 0;
+        countWrong = 0;
     }
 
-    if (!tabelle) {
-        tabelle = new Array(anzahlZeilen);
-        for (var i=0; i<anzahlZeilen; i++) {
-            tabelle[i] = new Array(anzahlSpalten);
+    if (!resultTable) {
+        resultTable = new Array(numRows);
+        for (var i=0; i<numRows; i++) {
+            resultTable[i] = new Array(numCols);
         }
 
-        for (var i=0; i<anzahlZeilen; i++) {
-            for (var j=0; j<anzahlSpalten; j++) {
-                tabelle[i][j] = 1;
+        for (var i=0; i<numRows; i++) {
+            for (var j=0; j<numCols; j++) {
+                resultTable[i][j] = 1;
             }
         }
     }
 }
 
-function richteSeiteEin () {
-    document.querySelector('#knopf2').addEventListener('click', antwortFunktion);
-    anzahlLaden();
+function initPage () {
+    document.querySelector('#sendAnswer').addEventListener('click', sendAnswer);
+    loadStatus();
 
-    ausgabePunkte();
-    ausgabeTabelle();
-    aufgabeStellFunktion();
+    showPoints();
+    showTable();
+    askTask();
 }
-window.addEventListener('load', richteSeiteEin)
+window.addEventListener('load', initPage)

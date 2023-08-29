@@ -22,18 +22,18 @@
   <body>
 
     <main>
-      <h1>Bestes 1*1</h1>
+      <h1>Multissimo</h1>
 
-      <form action="javascript:antwortFunktion()">
-        <output id="punktestatus"></output>
-        <pre><output id="aufgabe"></output></pre>
-        <input type="tel" id="antwort" size="4">
-        <button type="button" id="knopf2">Antwort</button>
-        <pre><output id="bewertung" class="richtig"></output></pre>
-        <pre><output id="zaehler"></output></pre>
+      <form action="javascript:sendAnswer()">
+        <output id="points"></output>
+        <pre><output id="task"></output></pre>
+        <label for="answer"></label><input type="tel" id="answer" size="4">
+        <button type="button" id="sendAnswer">-></button>
+        <pre><output id="rating" class="correct"></output></pre>
+        <pre><output id="counter"></output></pre>
       </form>
 
-      <table id="statistik"></table>
+      <table id="statistic"></table>
     </main>
   </body>
 </html>

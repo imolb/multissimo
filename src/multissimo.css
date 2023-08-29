@@ -7,19 +7,19 @@ h1 {
     font-size: medium;
 }
 
-#aufgabe {
+#task {
     font-size: x-large;
 }
 
-output.richtig {
+output.correct {
     color: green;
 }
 
-output.falsch {
+output.wrong {
     color: red;
 }
 
-#statistik {
+#statistic {
     font-size: x-small;
 }
 
