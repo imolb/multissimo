@@ -16,73 +16,116 @@ var numCols = 11;
 var resultTable = new Array(numRows);
 
 
-function sumTable(table) {
-    var sum = 0;
-
-    for (var i=0; i<numRows; i++) {
-        for (var j=0; j<numRows; j++) {
-            sum = sum + table[i][j];
-        }
+class Training {
+    constructor(type, numRows, numCols) {
+        this.type = type;
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.table = null;
+        this.initTable();
     }
 
-    return sum;
-}
-
-function minMaxTable(table) {
-    var minTable = Infinity;
-    var maxTable = 0;
-
-    for (var i=0; i<numRows; i++) {
-        for (var j=0; j<numRows; j++) {
-            minTable = Math.min(minTable, table[i][j]);
-            maxTable = Math.max(maxTable, table[i][j]);
+    initTable() {
+        this.table = new Array(this.numRows);
+        for (var i=0; i<this.numRows; i++) {
+            this.table[i] = new Array(this.numCols);
         }
-    }
 
-    return {min: minTable, max: maxTable};
-}
-
-function selectItemFromTable(table, position) {
-    var sum = 0;
-
-    for (var i=0; i<numRows; i++) {
-        for (var j=0; j<numCols; j++) {
-            sum = sum + table[i][j];
-            if (sum >= position) {
-                return {i: i, j: j};
+        for (var i=0; i<this.numRows; i++) {
+            for (var j=0; j<this.numCols; j++) {
+                this.table[i][j] = 1;
             }
         }
     }
+
+
+    sum() {
+        var sum = 0;
+
+        for (var i=0; i<this.numRows; i++) {
+            for (var j=0; j<this.numRows; j++) {
+                sum = sum + this.table[i][j];
+            }
+        }
+
+        return sum;
+    }
+
+    minMaxTable() {
+        var minTable = Infinity;
+        var maxTable = 0;
+
+        for (var i=0; i<this.numRows; i++) {
+            for (var j=0; j<this.numRows; j++) {
+                minTable = Math.min(minTable, this.table[i][j]);
+                maxTable = Math.max(maxTable, this.table[i][j]);
+            }
+        }
+
+        return {min: minTable, max: maxTable};
+    }
+
+    selectItem(position) {
+        var sum = 0;
+
+        for (var i=0; i<this.numRows; i++) {
+            for (var j=0; j<this.numCols; j++) {
+                sum = sum + this.table[i][j];
+                if (sum >= position) {
+                    return {i: i, j: j};
+                }
+            }
+        }
+    }
+
+    randomTask() {
+        var position = Math.floor(Math.random()*this.sum());
+
+        var element = this.selectItem(position);
+
+        let task = new Task(this.type, element.i, element.j, element.i * element.j)
+
+        return task;
+    }
 }
 
-function randomTask(table) {
-    var position = Math.floor(Math.random()*sumTable(table));
 
-    var element = selectItemFromTable(table, position);
+class Task {
+    constructor(type, number1, number2, answer) {
+        this.type = type;
+        this.number1 = number1;
+        this.number2 = number2;
+        this.result = answer;
+    }
 
-    number1 = element.i;
-    number2 = element.j;
+    taskText () {
+        return this.number1 + " * " + this.number2 + " = ";
+    }
+
+    taskTextWithAnswer () {
+        return this.taskText() + this.result;
+    }
 }
+
+let trainer = new Training('*', 5, 7);
+console.log(JSON.stringify(trainer));
+var task = null;
 
 function askTask () {
-    randomTask(resultTable);
+    clearForm();
 
-    var taskText = number1 + " * " + number2 + " = ";
+    task = trainer.randomTask();
 
-    document.querySelector('#task').textContent = taskText;
-    document.querySelector('#answer').value = "";
-    document.querySelector('#answer').focus();
-    document.querySelector('#rating').textContent = "";
+    document.querySelector('#task').textContent = task.taskText();
 }
 
-function sendAnswer () {
-    var correctResult = number1*number2;
-    var taskText = number1 + " * " + number2 + " = " + correctResult;
+function checkAnswer () {
     var answer = document.querySelector('#answer').value;
+    var taskText = task.taskTextWithAnswer();
 
     var ratingText = "";
     var ratingClass = "";
-    if (answer == correctResult)  {
+    if (answer == task.result)  {
         ratingClass = "correct";
         countRight = countRight+1;
         resultTable[number1][number2] = resultTable[number1][number2] / 2;
@@ -98,9 +141,9 @@ function sendAnswer () {
     document.querySelector('#rating').setAttribute('class', ratingClass);
 
 
-    showPoints();
-    saveStatus();
-    showTable();
+    //showPoints();
+    //saveStatus();
+    //showTable();
 
     window.setTimeout(askTask, 2000);
 }
@@ -225,11 +268,11 @@ function loadStatus () {
 }
 
 function initPage () {
-    document.querySelector('#sendAnswer').addEventListener('click', sendAnswer);
+    document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
     loadStatus();
 
-    showPoints();
-    showTable();
+    //showPoints();
+    //showTable();
     askTask();
 }
 window.addEventListener('load', initPage)
