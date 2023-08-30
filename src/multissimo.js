@@ -5,15 +5,15 @@
  *
  */
 
-var number1 = 0;
-var number2 = 0;
-var countRight=0;
-var countWrong=0;
+let number1 = 0;
+let number2 = 0;
+let countRight=0;
+let countWrong=0;
 
-var numRows = 11;
-var numCols = 11;
+let numRows = 11;
+let numCols = 11;
 
-var resultTable = new Array(numRows);
+let resultTable = new Array(numRows);
 
 
 class Training {
@@ -23,27 +23,55 @@ class Training {
         this.numCols = numCols;
         this.table = null;
         this.initTable();
+        this.points = new Points();
+    }
+
+    init () {
+        this.type = '*';
+        this.numRows = 7;
+        this.numCols = 8;
+        this.table = null;
+        this.initTable();
     }
 
     initTable() {
         this.table = new Array(this.numRows);
-        for (var i=0; i<this.numRows; i++) {
+        for (let i=0; i<this.numRows; i++) {
             this.table[i] = new Array(this.numCols);
         }
 
-        for (var i=0; i<this.numRows; i++) {
-            for (var j=0; j<this.numCols; j++) {
+        for (let i=0; i<this.numRows; i++) {
+            for (let j=0; j<this.numCols; j++) {
                 this.table[i][j] = 1;
             }
         }
     }
 
 
-    sum() {
-        var sum = 0;
+    save () {
+        localStorage.setItem('training', JSON.stringify(this));
+        this.points.save();
+    }
 
-        for (var i=0; i<this.numRows; i++) {
-            for (var j=0; j<this.numRows; j++) {
+    load () {
+        this.points.load();
+        let thisLoaded = JSON.parse(localStorage.getItem('training'));
+
+        if (!thisLoaded) {
+            this.init();
+        } else {
+            this.type = thisLoaded.type;
+            this.numRows = thisLoaded.numRows;
+            this.numCols = thisLoaded.numCols;
+            this.table = thisLoaded.table;
+        }
+    }
+
+    sum() {
+        let sum = 0;
+
+        for (let i=0; i<this.numRows; i++) {
+            for (let j=0; j<this.numRows; j++) {
                 sum = sum + this.table[i][j];
             }
         }
@@ -52,11 +80,11 @@ class Training {
     }
 
     minMaxTable() {
-        var minTable = Infinity;
-        var maxTable = 0;
+        let minTable = Infinity;
+        let maxTable = 0;
 
-        for (var i=0; i<this.numRows; i++) {
-            for (var j=0; j<this.numRows; j++) {
+        for (let i=0; i<this.numRows; i++) {
+            for (let j=0; j<this.numRows; j++) {
                 minTable = Math.min(minTable, this.table[i][j]);
                 maxTable = Math.max(maxTable, this.table[i][j]);
             }
@@ -66,10 +94,10 @@ class Training {
     }
 
     selectItem(position) {
-        var sum = 0;
+        let sum = 0;
 
-        for (var i=0; i<this.numRows; i++) {
-            for (var j=0; j<this.numCols; j++) {
+        for (let i=0; i<this.numRows; i++) {
+            for (let j=0; j<this.numCols; j++) {
                 sum = sum + this.table[i][j];
                 if (sum >= position) {
                     return {i: i, j: j};
@@ -79,13 +107,58 @@ class Training {
     }
 
     randomTask() {
-        var position = Math.floor(Math.random()*this.sum());
+        let position = Math.floor(Math.random()*this.sum());
 
-        var element = this.selectItem(position);
+        let element = this.selectItem(position);
 
         let task = new Task(this.type, element.i, element.j, element.i * element.j)
 
         return task;
+    }
+
+    correctAnswer (task) {
+        this.table[task.number1][task.number2] = this.table[task.number1][task.number2] / 2;
+        this.points.correctAnswer();
+    }
+
+    wrongAnswer (task) {
+       this.table[task.number1][task.number2] = this.table[task.number1][task.number2] * 2;
+       this.points.wrongAnswer();
+    }
+
+    appendTableAsHtml (htmlTable) {
+        for (let i=-1; i<this.numRows; i++) {
+            let maxMinValue = this.minMaxTable();
+
+            let tr = document.createElement('tr');
+            htmlTable.appendChild(tr);
+
+            for (let j=-1; j<this.numCols; j++) {
+                if (i >= 0 && j >= 0) {
+                    let td = createElementWithText('td', "");
+                    td.setAttribute('title', this.table[i][j]);
+                    td.setAttribute('style', 'background-color:'+this.cellColor(maxMinValue, this.table[i][j]));
+                    tr.appendChild(td);
+                } else if (i == -1 && j >= 0) {
+                    tr.appendChild(createElementWithText('th', j));
+                } else if (i >= 0 && j == -1) {
+                    tr.appendChild(createElementWithText('th', i));
+                } else {
+                    tr.appendChild(createElementWithText('th', ""));
+                }
+            }
+        }
+    }
+
+    cellColor(maxMinValue, value) {
+        let partition;
+        if (maxMinValue.max - maxMinValue.min == 0) {
+            partition = "50";
+        } else {
+            partition = (value - maxMinValue.min)/(maxMinValue.max - maxMinValue.min)*100;
+        }
+        let color = "rgb("+partition+"% " + (100 - partition) + "% 50%)";
+        return color;
     }
 }
 
@@ -107,123 +180,123 @@ class Task {
     }
 }
 
+class Points {
+    constructor(counterRight, counterWrong) {
+        this.init();
+    }
+
+    init () {
+        this.counterRight = 0;
+        this.counterWrong = 0;
+    }
+
+    save () {
+        localStorage.setItem('points', JSON.stringify(this));
+    }
+
+    load () {
+        let thisLoaded = JSON.parse(localStorage.getItem('points'));
+
+        if (!thisLoaded) {
+            this.init();
+        } else {
+            this.counterRight = thisLoaded.counterRight;
+            this.counterWrong = thisLoaded.counterWrong;
+        }
+    }
+
+    correctAnswer () {
+        this.counterRight = this.counterRight + 1;
+    }
+
+    wrongAnswer () {
+        this.wrongAnswer = this.wrongAnswer + 1;
+    }
+    
+    pointText () {
+        let countTotal = this.counterRight - this.counterWrong;
+        let pointStatus = "🎯 " + countTotal +
+                                   " (✔️" + this.counterRight + " ❌" + this.counterWrong + ") ";
+        let threshold3 = 1000;
+        let threshold2 = 100;
+        let threshold1 = 10;
+    
+        let won3 = Math.floor(countTotal / threshold3);
+        let won2 = Math.floor((countTotal - threshold3*won3) / threshold2);
+        let won1 = Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1);
+    
+        for (let i=1; i<=won1; i++) {
+            pointStatus = pointStatus + "😋";
+        }
+    
+        for (let i=1; i<=won2; i++) {
+            pointStatus = pointStatus + "🏅";
+        }
+    
+        for (let i=1; i<=won3; i++) {
+            pointStatus = pointStatus + "🏆";
+        }
+
+        return pointStatus;
+    }
+}
+
 let trainer = new Training('*', 5, 7);
-console.log(JSON.stringify(trainer));
-var task = null;
+let currentTask = null;
 
 function askTask () {
     clearForm();
 
-    task = trainer.randomTask();
+    currentTask = trainer.randomTask();
 
-    document.querySelector('#task').textContent = task.taskText();
+    document.querySelector('#task').textContent = currentTask.taskText();
 }
 
 function checkAnswer () {
-    var answer = document.querySelector('#answer').value;
-    var taskText = task.taskTextWithAnswer();
+    let answer = document.querySelector('#answer').value;
+    let taskText = currentTask.taskTextWithAnswer();
 
-    var ratingText = "";
-    var ratingClass = "";
-    if (answer == task.result)  {
+    let ratingText = "";
+    let ratingClass = "";
+    if (answer == currentTask.result)  {
         ratingClass = "correct";
-        countRight = countRight+1;
-        resultTable[number1][number2] = resultTable[number1][number2] / 2;
+        trainer.correctAnswer(currentTask);
         taskText = taskText + " ✔";
     } else {
         ratingClass = "wrong";
-        countWrong=countWrong+1;
-        resultTable[number1][number2] = resultTable[number1][number2] * 2;
+        trainer.wrongAnswer();
         taskText = taskText + " ❌";
     }
 
     document.querySelector('#task').textContent = taskText;
     document.querySelector('#rating').setAttribute('class', ratingClass);
+    document.querySelector('#points').textContent = trainer.points.pointText();
+    showTable();
 
-
-    //showPoints();
-    //saveStatus();
-    //showTable();
+    trainer.save();
 
     window.setTimeout(askTask, 2000);
 }
 
-function showPoints() {
-    var countTotal = countRight - countWrong;
-    var pointStatus = "🎯 " + countTotal +
-                               " (✔️" + countRight + " ❌" + countWrong + ") ";
-    var threshold3 = 1000;
-    var threshold2 = 100;
-    var threshold1 = 10;
 
-    var won3 = Math.floor(countTotal / threshold3);
-    var won2 = Math.floor((countTotal - threshold3*won3) / threshold2);
-    var won1 = Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1);
-
-    for (var i=1; i<=won1; i++) {
-        pointStatus = pointStatus + "😋";
-    }
-
-    for (var i=1; i<=won2; i++) {
-        pointStatus = pointStatus + "🏅";
-    }
-
-    for (var i=1; i<=won3; i++) {
-        pointStatus = pointStatus + "🏆";
-    }
-
-
-    document.querySelector('#points').textContent = pointStatus;
-}
 
 const removeChildren = (parent) => {
     while (parent.lastChild) {
         parent.removeChild(parent.lastChild);
     }
-};
+}
 
 function showTable() {
-    var table = document.querySelector('#statistic');
-
+    let table = document.querySelector('#statistic');
     removeChildren(table);
-
-    for (var i=-1; i<numRows; i++) {
-        var maxMinValue = minMaxTable(resultTable);
-
-        var tr = document.createElement('tr');
-        table.appendChild(tr);
-
-        for (var j=-1; j<numCols; j++) {
-            if (i >= 0 && j >= 0) {
-                var td = createElementWithText('td', "");
-                td.setAttribute('title', resultTable[i][j]);
-                td.setAttribute('style', 'background-color:'+cellColor(maxMinValue, resultTable[i][j]));
-                tr.appendChild(td);
-            } else if (i == -1 && j >= 0) {
-                tr.appendChild(createElementWithText('th', j));
-            } else if (i >= 0 && j == -1) {
-                tr.appendChild(createElementWithText('th', i));
-            } else {
-                tr.appendChild(createElementWithText('th', ""));
-            }
-        }
-    }
+    trainer.appendTableAsHtml(table);
 }
 
-function cellColor(maxMinValue, value) {
-    var partition;
-    if (maxMinValue.max - maxMinValue.min == 0) {
-        partition = "50";
-    } else {
-        partition = (value - maxMinValue.min)/(maxMinValue.max - maxMinValue.min)*100;
-    }
-    var color = "rgb("+partition+"% " + (100 - partition) + "% 50%)";
-    return color;
-}
+
 
 function createElementWithText(nodeType, text) {
-    var node = document.createElement(nodeType);
-    var textNode = document.createTextNode(text);
+    let node = document.createElement(nodeType);
+    let textNode = document.createTextNode(text);
     node.appendChild(textNode);
 
     return node;
@@ -234,45 +307,17 @@ function clearForm () {
     document.querySelector('#answer').value = "";
     document.querySelector('#answer').focus();
 
-    document.querySelector('#counter').textContent = "Correct: " + countRight + "\nWrong: " +countWrong ;
 }
 
-function saveStatus () {
-    localStorage.setItem('countRight', countRight);
-    localStorage.setItem('countWrong', countWrong);
-    localStorage.setItem('resultTable', JSON.stringify(resultTable));
-}
 
-function loadStatus () {
-    countRight = parseInt(localStorage.getItem('countRight'));
-    countWrong = parseInt(localStorage.getItem('countWrong'));
-    resultTable = JSON.parse(localStorage.getItem('resultTable'));
 
-    if (isNaN(countRight) || isNaN(countWrong)) {
-        countRight = 0;
-        countWrong = 0;
-    }
-
-    if (!resultTable) {
-        resultTable = new Array(numRows);
-        for (var i=0; i<numRows; i++) {
-            resultTable[i] = new Array(numCols);
-        }
-
-        for (var i=0; i<numRows; i++) {
-            for (var j=0; j<numCols; j++) {
-                resultTable[i][j] = 1;
-            }
-        }
-    }
-}
 
 function initPage () {
     document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
-    loadStatus();
+    trainer.load();
 
-    //showPoints();
-    //showTable();
+    document.querySelector('#points').textContent = trainer.points.pointText();
+    showTable();
     askTask();
 }
 window.addEventListener('load', initPage)
