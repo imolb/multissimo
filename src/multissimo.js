@@ -5,25 +5,55 @@
  *
  */
 
-let number1 = 0;
-let number2 = 0;
-let countRight=0;
-let countWrong=0;
+class School {
+    constructor() {
+        this.trainings = new Array(0);
+    }
 
-let numRows = 11;
-let numCols = 11;
+    save () {
+        localStorage.setItem('school', JSON.stringify(this));
+    }
 
-let resultTable = new Array(numRows);
+    load () {
+        let thisLoaded = JSON.parse(localStorage.getItem('school'));
 
+        if (thisLoaded) {
+            this.trainings = new Array(0);
+            for (let i = 0; i<thisLoaded.trainings.length; i++) {
+                this.trainings.push(new Training(thisLoaded.trainings[i]));
+            }
+
+            // TODO: Remember last selected
+            if (this.trainings.length > 0) {
+                trainer = this.trainings[0];
+            }
+        }
+    }
+
+    addNewTraining (name, type, numRows, numCols) {
+        this.trainings.push(new Training (name, type, numRows, numCols));
+    }
+}
 
 class Training {
-    constructor(type, numRows, numCols) {
-        this.type = type;
-        this.numRows = numRows;
-        this.numCols = numCols;
-        this.table = null;
-        this.initTable();
-        this.points = new Points();
+    constructor(jsObject, type, numRows, numCols) {
+        if (!jsObject) {
+            this.init();
+        } else if (arguments.length == 1) {
+            this.name = jsObject.name;
+            this.type = jsObject.type;
+            this.numRows = jsObject.numRows;
+            this.numCols = jsObject.numCols;
+            this.table = jsObject.table;
+            this.points = new Points(jsObject.points);
+        } else {
+            this.name = jsObject;
+            this.type = type;
+            this.numRows = numRows;
+            this.numCols = numCols;
+            this.initTable();
+            this.points = new Points();
+        }
     }
 
     init () {
@@ -47,25 +77,6 @@ class Training {
         }
     }
 
-
-    save () {
-        localStorage.setItem('training', JSON.stringify(this));
-        this.points.save();
-    }
-
-    load () {
-        this.points.load();
-        let thisLoaded = JSON.parse(localStorage.getItem('training'));
-
-        if (!thisLoaded) {
-            this.init();
-        } else {
-            this.type = thisLoaded.type;
-            this.numRows = thisLoaded.numRows;
-            this.numCols = thisLoaded.numCols;
-            this.table = thisLoaded.table;
-        }
-    }
 
     sum() {
         let sum = 0;
@@ -181,28 +192,18 @@ class Task {
 }
 
 class Points {
-    constructor(counterRight, counterWrong) {
-        this.init();
+    constructor(jsObject) {
+        if (!jsObject) {
+            this.init();
+        } else {
+            this.counterRight = jsObject.counterRight;
+            this.counterWrong = jsObject.counterWrong;
+        }
     }
 
     init () {
         this.counterRight = 0;
         this.counterWrong = 0;
-    }
-
-    save () {
-        localStorage.setItem('points', JSON.stringify(this));
-    }
-
-    load () {
-        let thisLoaded = JSON.parse(localStorage.getItem('points'));
-
-        if (!thisLoaded) {
-            this.init();
-        } else {
-            this.counterRight = thisLoaded.counterRight;
-            this.counterWrong = thisLoaded.counterWrong;
-        }
     }
 
     correctAnswer () {
@@ -241,7 +242,12 @@ class Points {
     }
 }
 
-let trainer = new Training('*', 5, 7);
+let school = new School();
+
+// TODO Create GUI to add new trainings
+school.addNewTraining('Simons 10x10', '*', 2, 2);
+
+let trainer = school.trainings[0];
 let currentTask = null;
 
 function askTask () {
@@ -264,7 +270,7 @@ function checkAnswer () {
         taskText = taskText + " ✔";
     } else {
         ratingClass = "wrong";
-        trainer.wrongAnswer();
+        trainer.wrongAnswer(currentTask);
         taskText = taskText + " ❌";
     }
 
@@ -273,12 +279,10 @@ function checkAnswer () {
     document.querySelector('#points').textContent = trainer.points.pointText();
     showTable();
 
-    trainer.save();
+    school.save();
 
     window.setTimeout(askTask, 2000);
 }
-
-
 
 const removeChildren = (parent) => {
     while (parent.lastChild) {
@@ -292,8 +296,6 @@ function showTable() {
     trainer.appendTableAsHtml(table);
 }
 
-
-
 function createElementWithText(nodeType, text) {
     let node = document.createElement(nodeType);
     let textNode = document.createTextNode(text);
@@ -306,7 +308,6 @@ function clearForm () {
     document.querySelector('#task').textContent = "";
     document.querySelector('#answer').value = "";
     document.querySelector('#answer').focus();
-
 }
 
 
@@ -314,7 +315,7 @@ function clearForm () {
 
 function initPage () {
     document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
-    trainer.load();
+    school.load();
 
     document.querySelector('#points').textContent = trainer.points.pointText();
     showTable();
