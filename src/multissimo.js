@@ -58,6 +58,14 @@ class School {
         return null;
     }
 
+    setActiveTrainingByName (name) {
+        for (let i = 0; i<this.trainings.length; i++) {
+            if (this.trainings[i].name == name) {
+                return this.trainerIndex = i;
+            }
+        }
+    }
+
     createDefaultTrainings () {
         if (this.getTrainingByName('10 + 10') === null) {
             this.addNewTraining('10 + 10', '+', 11, 11);
@@ -385,15 +393,35 @@ function clearForm () {
     document.querySelector('#answer').focus();
 }
 
+function setTrainingSelection () {
+    let select = document.querySelector('#training');
+    removeChildren(select);
 
+    for (let i = 0; i< school.trainings.length; i++) {
+        let option = createElementWithText('option', school.trainings[i].name);
+        option.setAttribute('value', school.trainings[i].name);
+        select.appendChild(option);
+    }
+    select.addEventListener('change', changeTraining);
+}
+
+function changeTraining () {
+    let select = document.querySelector('#training');
+    school.setActiveTrainingByName(select.selectedOptions[0].value);
+    updateGui();
+}
+
+function updateGui () {
+    document.querySelector('#points').textContent = school.training().points.pointText();
+    showTable();
+    askTask();
+}
 
 
 function initPage () {
     document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
     school.load();
-
-    document.querySelector('#points').textContent = school.training().points.pointText();
-    showTable();
-    askTask();
+    setTrainingSelection();
+    updateGui();
 }
 window.addEventListener('load', initPage)
