@@ -5,6 +5,11 @@
  *
  */
 
+ // TODO: set drop down selection to saved selection
+ // TODO: consider number1 number2 for / and - are different
+ // TODO: wrong answer gives uncauhgt typeError
+ // TODO: overlay with huge font size
+
  const ThemeIcons = {
     'trophy':  {'ok': '👍', 'nok': '👎', 'L1': '😋', 'L2': '🏅', 'L3': '🏆'},
     'unicorn': {'ok': '🐻', 'nok': '🫏', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
@@ -24,7 +29,7 @@ class School {
 
     load () {
         let thisLoaded = JSON.parse(localStorage.getItem('school'));
-        this.trainerIndex = 3;
+        this.trainerIndex = 0;
 
         if (thisLoaded) {
             this.theme = thisLoaded.theme;
@@ -369,14 +374,19 @@ function checkAnswer () {
 
     let ratingText = "";
     let ratingClass = "";
+    let timeout = 0;
     if (answer == currentTask.result)  {
         ratingClass = "correct";
         school.training().correctAnswer(currentTask);
         taskText = taskText + " ✔";
+        document.querySelector("#overlay").innerHTML = ThemeIcons[school.theme]['ok'];
+        timeout = 1000;
     } else {
         ratingClass = "wrong";
         school.training().wrongAnswer(currentTask);
         taskText = taskText + " ❌";
+        document.querySelector("#overlay").innerHTML = ThemeIcons[school.theme]['nok'];
+        timeout = 3000;
     }
 
     document.querySelector('#task').textContent = taskText;
@@ -385,7 +395,9 @@ function checkAnswer () {
 
     school.save();
 
-    window.setTimeout(askTask, 2000);
+    document.querySelector("#overlay").style.display = "block";
+
+    window.setTimeout(askTask, timeout);
 }
 
 const removeChildren = (parent) => {
@@ -412,6 +424,7 @@ function clearForm () {
     document.querySelector('#task').textContent = "";
     document.querySelector('#answer').value = "";
     document.querySelector('#answer').focus();
+    document.querySelector("#overlay").style.display = "none";
 }
 
 function setTrainingSelection () {
