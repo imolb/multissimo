@@ -8,6 +8,7 @@
 class School {
     constructor() {
         this.trainings = new Array(0);
+        this.trainerIndex = null;
     }
 
     save () {
@@ -16,6 +17,7 @@ class School {
 
     load () {
         let thisLoaded = JSON.parse(localStorage.getItem('school'));
+        this.trainerIndex = 0;
 
         if (thisLoaded) {
             this.trainings = new Array(0);
@@ -23,15 +25,49 @@ class School {
                 this.trainings.push(new Training(thisLoaded.trainings[i]));
             }
 
-            // TODO: Remember last selected
             if (this.trainings.length > 0) {
-                trainer = this.trainings[0];
+                if (thisLoaded.trainerIndex < this.trainings.length) {
+                    this.trainerIndex = thisLoaded.trainerIndex;
+                } else {
+                    this.trainerIndex = 0;
+                }
             }
         }
+
+        this.createDefaultTrainings();
+    }
+
+    training () {
+        return this.trainings[this.trainerIndex];
     }
 
     addNewTraining (name, type, numRows, numCols) {
-        this.trainings.push(new Training (name, type, numRows, numCols));
+        if (this.getTrainingByName(name) === null) {
+            this.trainings.push(new Training (name, type, numRows, numCols));
+        } else {
+            console.error('Duplicate training name '+name);
+        }
+    }
+
+    getTrainingByName (name) {
+        for (let i = 0; i<this.trainings.length; i++) {
+            if (this.trainings[i].name == name) {
+                return this.trainings[i];
+            }
+        }
+        return null;
+    }
+
+    createDefaultTrainings () {
+        if (this.getTrainingByName('10 + 10') === null) {
+            this.addNewTraining('10 + 10', '+', 10, 10);
+        }
+        if (this.getTrainingByName('10 * 10') === null) {
+            this.addNewTraining('10 * 10', '*', 10, 10);
+        }
+        if (this.getTrainingByName('100 : 10') === null) {
+            this.addNewTraining('100 : 10', '/', 10, 10);
+        }
     }
 }
 
@@ -122,9 +158,19 @@ class Training {
 
         let element = this.selectItem(position);
 
-        let task = new Task(this.type, element.i, element.j, element.i * element.j)
-
-        return task;
+        switch (this.type) {
+            case '+':
+                return new Task(this.type, element.i, element.j, element.i + element.j)
+                break;
+            case '*':
+                return new Task(this.type, element.i, element.j, element.i * element.j)
+                break;
+            case '/':
+                return new Task(this.type, element.i*element.j, element.i, element.j)
+                break;
+            default:
+                console.error('Undefined training type ' + this.type);
+        }
     }
 
     correctAnswer (task) {
@@ -183,7 +229,7 @@ class Task {
     }
 
     taskText () {
-        return this.number1 + " * " + this.number2 + " = ";
+        return this.number1 + " " + this.type + " " + this.number2 + " = ";
     }
 
     taskTextWithAnswer () {
@@ -244,16 +290,12 @@ class Points {
 
 let school = new School();
 
-// TODO Create GUI to add new trainings
-school.addNewTraining('Simons 10x10', '*', 2, 2);
-
-let trainer = school.trainings[0];
 let currentTask = null;
 
 function askTask () {
     clearForm();
 
-    currentTask = trainer.randomTask();
+    currentTask = school.training().randomTask();
 
     document.querySelector('#task').textContent = currentTask.taskText();
 }
@@ -266,17 +308,17 @@ function checkAnswer () {
     let ratingClass = "";
     if (answer == currentTask.result)  {
         ratingClass = "correct";
-        trainer.correctAnswer(currentTask);
+        school.training().correctAnswer(currentTask);
         taskText = taskText + " ✔";
     } else {
         ratingClass = "wrong";
-        trainer.wrongAnswer(currentTask);
+        school.training().wrongAnswer(currentTask);
         taskText = taskText + " ❌";
     }
 
     document.querySelector('#task').textContent = taskText;
     document.querySelector('#rating').setAttribute('class', ratingClass);
-    document.querySelector('#points').textContent = trainer.points.pointText();
+    document.querySelector('#points').textContent = school.training().points.pointText();
     showTable();
 
     school.save();
@@ -293,7 +335,7 @@ const removeChildren = (parent) => {
 function showTable() {
     let table = document.querySelector('#statistic');
     removeChildren(table);
-    trainer.appendTableAsHtml(table);
+    school.training().appendTableAsHtml(table);
 }
 
 function createElementWithText(nodeType, text) {
@@ -317,7 +359,7 @@ function initPage () {
     document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
     school.load();
 
-    document.querySelector('#points').textContent = trainer.points.pointText();
+    document.querySelector('#points').textContent = school.training().points.pointText();
     showTable();
     askTask();
 }
