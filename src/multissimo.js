@@ -17,7 +17,7 @@ class School {
 
     load () {
         let thisLoaded = JSON.parse(localStorage.getItem('school'));
-        this.trainerIndex = 0;
+        this.trainerIndex = 3;
 
         if (thisLoaded) {
             this.trainings = new Array(0);
@@ -60,13 +60,16 @@ class School {
 
     createDefaultTrainings () {
         if (this.getTrainingByName('10 + 10') === null) {
-            this.addNewTraining('10 + 10', '+', 10, 10);
+            this.addNewTraining('10 + 10', '+', 11, 11);
+        }
+        if (this.getTrainingByName('20 - 10') === null) {
+            this.addNewTraining('20 - 10', '-', 11, 11);
         }
         if (this.getTrainingByName('10 * 10') === null) {
-            this.addNewTraining('10 * 10', '*', 10, 10);
+            this.addNewTraining('10 * 10', '*', 11, 11);
         }
         if (this.getTrainingByName('100 : 10') === null) {
-            this.addNewTraining('100 : 10', '/', 10, 10);
+            this.addNewTraining('100 : 10', '/', 11, 11);
         }
     }
 }
@@ -109,6 +112,29 @@ class Training {
         for (let i=0; i<this.numRows; i++) {
             for (let j=0; j<this.numCols; j++) {
                 this.table[i][j] = 1;
+
+                if (this.type == '+' || this.type == '-') {
+                    if (i == 0 || j == 0) {
+                        this.table[i][j] = 0.0625;
+                    } else if (i == 1 || j == 1) {
+                        this.table[i][j] = 0.125;
+                    }
+                }
+
+                if (this.type == '*' || this.type == '/') {
+                    if (i == 0 || j == 0) {
+                        if (this.type == '/') {
+                            this.table[i][j] = 0;
+                        } else {
+                            this.table[i][j] = 0.0625;
+                        }
+                    } else if (i == 1 || j == 1) {
+                        this.table[i][j] = 0.125;
+                    } else if (i == 5 || j == 5 || i == 2 || j == 2 || i == 10 || j == 10) {
+                        this.table[i][j] = 0.25;
+                    }
+                }
+
             }
         }
     }
@@ -161,6 +187,9 @@ class Training {
         switch (this.type) {
             case '+':
                 return new Task(this.type, element.i, element.j, element.i + element.j)
+                break;
+            case '-':
+                return new Task(this.type, element.i+element.j, element.i, element.j)
                 break;
             case '*':
                 return new Task(this.type, element.i, element.j, element.i * element.j)
@@ -229,7 +258,11 @@ class Task {
     }
 
     taskText () {
-        return this.number1 + " " + this.type + " " + this.number2 + " = ";
+        let operator = this.type;
+        if (operator == '/') {
+            operator = ':'
+        }
+        return this.number1 + " " + operator + " " + this.number2 + " = ";
     }
 
     taskTextWithAnswer () {
