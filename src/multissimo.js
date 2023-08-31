@@ -220,7 +220,11 @@ class Training {
                 return new Task(this.type, element.i, element.j, element.i * element.j)
                 break;
             case '/':
-                return new Task(this.type, element.i*element.j, element.i, element.j)
+                if (element.i == 0) {
+                    return this.randomTask();
+                } else {
+                    return new Task(this.type, element.i*element.j, element.i, element.j)
+                }
                 break;
             default:
                 console.error('Undefined training type ' + this.type);
@@ -306,7 +310,7 @@ class Points {
     }
 
     init () {
-        this.counterRight = 1123;
+        this.counterRight = 283;
         this.counterWrong = 0;
     }
 
@@ -320,8 +324,9 @@ class Points {
     
     pointText () {
         let countTotal = this.counterRight - this.counterWrong;
-        let pointStatus = "🎯 " + countTotal +
-                                   " (✔️" + this.counterRight + " ❌" + this.counterWrong + ") ";
+        let pointStatus = {'L0': '', 'L1': '', 'L2': '', 'L3': ''};
+        pointStatus.L0 = "🎯 " + countTotal +
+                                   " ("+ ThemeIcons[school.theme]['ok'] + this.counterRight + " " + ThemeIcons[school.theme]['nok'] + this.counterWrong + ") ";
         let threshold3 = 100;
         let threshold2 = 10;
         let threshold1 = 1;
@@ -331,15 +336,15 @@ class Points {
         let won1 = Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1);
     
         for (let i=1; i<=won1; i++) {
-            pointStatus = pointStatus + ThemeIcons[school.theme]['L1'];
+            pointStatus.L1 = pointStatus.L1 + ThemeIcons[school.theme]['L1'];
         }
     
         for (let i=1; i<=won2; i++) {
-            pointStatus = pointStatus + ThemeIcons[school.theme]['L2'];
+            pointStatus.L2 = pointStatus.L2 + ThemeIcons[school.theme]['L2'];
         }
     
         for (let i=1; i<=won3; i++) {
-            pointStatus = pointStatus + ThemeIcons[school.theme]['L3'];
+            pointStatus.L3 = pointStatus.L3 + ThemeIcons[school.theme]['L3'];
         }
 
         return pointStatus;
@@ -376,8 +381,7 @@ function checkAnswer () {
 
     document.querySelector('#task').textContent = taskText;
     document.querySelector('#rating').setAttribute('class', ratingClass);
-    document.querySelector('#points').textContent = school.training().points.pointText();
-    showTable();
+    updateGui(false);
 
     school.save();
 
@@ -425,19 +429,26 @@ function setTrainingSelection () {
 function changeTraining () {
     let select = document.querySelector('#training');
     school.setActiveTrainingByName(select.selectedOptions[0].value);
-    updateGui();
+    updateGui(true);
 }
 
 function changeTheme () {
     let select = document.querySelector('#theme');
     school.setThemeByName(select.selectedOptions[0].value);
-    updateGui();
+    updateGui(false);
 }
 
-function updateGui () {
-    document.querySelector('#points').textContent = school.training().points.pointText();
+function updateGui (withNewTask) {
+    let pointsText = school.training().points.pointText();
+    document.querySelector('#pointsL0').textContent = pointsText.L0;
+    document.querySelector('#pointsL1').textContent = pointsText.L1;
+    document.querySelector('#pointsL2').textContent = pointsText.L2;
+    document.querySelector('#pointsL3').textContent = pointsText.L3;
     showTable();
-    askTask();
+
+    if (withNewTask) {
+        askTask();
+    }
 }
 
 
@@ -446,6 +457,6 @@ function initPage () {
     document.querySelector('#theme').addEventListener('change', changeTheme);
     school.load();
     setTrainingSelection();
-    updateGui();
+    updateGui(true);
 }
 window.addEventListener('load', initPage)
