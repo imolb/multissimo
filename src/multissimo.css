@@ -50,7 +50,7 @@ output.wrong {
   bottom: 0;
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
-  font-size: 1000%;
+  font-size: 800%;
 }
 
 div.correct {

@@ -5,10 +5,6 @@
  *
  */
 
- // TODO: set drop down selection to saved selection
-  // TODO: Better layout
-
-
  const ThemeIcons = {
     'trophy':  {'ok': '👍', 'nok': '👎', 'L1': '😋', 'L2': '🏅', 'L3': '🏆'},
     'unicorn': {'ok': '🐻', 'nok': '🫏', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
@@ -316,7 +312,7 @@ class Points {
     }
 
     init () {
-        this.counterRight = 293;
+        this.counterRight = 0;
         this.counterWrong = 0;
     }
 
@@ -436,6 +432,10 @@ function setTrainingSelection () {
     for (let i = 0; i< school.trainings.length; i++) {
         let option = createElementWithText('option', school.trainings[i].name);
         option.setAttribute('value', school.trainings[i].name);
+        if (i == school.trainerIndex) {
+            option.setAttribute('selected', 'selected');
+        }
+
         select.appendChild(option);
     }
     select.addEventListener('change', changeTraining);
@@ -473,6 +473,13 @@ function updateGui (withNewTask) {
     document.querySelector('#pointsL3').textContent = pointsText.L3;
     document.querySelector('#answer').focus();
     showTable();
+
+
+    let themeSelect = document.querySelector('option[value=' + school.theme + ']');
+    if (themeSelect) {
+        themeSelect.setAttribute('selected', 'selected');
+    }
+
 
     if (withNewTask) {
         askTask();
