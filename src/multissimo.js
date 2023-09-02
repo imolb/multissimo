@@ -5,11 +5,9 @@
  *
  */
 
- // TODO: Donky not known to Android Firefox
-
- const ThemeIcons = {
+  const ThemeIcons = {
     'trophy':  {'ok': '👍', 'nok': '👎', 'L1': '😋', 'L2': '🏅', 'L3': '🏆'},
-    'unicorn': {'ok': '🐻', 'nok': '🫏', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
+    'unicorn': {'ok': '🐻', 'nok': '🦨', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
     'rocket':  {'ok': '🏁', 'nok': '🚩', 'L1': '🚲', 'L2': '🏎️', 'L3': '🚀'}
  }
 

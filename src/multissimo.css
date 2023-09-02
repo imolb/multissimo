@@ -28,6 +28,11 @@ input, button, select {
     font-size: 200%;
 }
 
+button {
+    background-color: white;
+    border: none;
+}
+
 output.correct {
     color: green;
 }
