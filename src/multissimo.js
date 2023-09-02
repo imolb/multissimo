@@ -6,8 +6,7 @@
  */
 
  // TODO: set drop down selection to saved selection
- // TODO: consider number1 number2 for / and - are different
- // TODO: Better layout
+  // TODO: Better layout
 
 
  const ThemeIcons = {
@@ -216,19 +215,19 @@ class Training {
 
         switch (this.type) {
             case '+':
-                return new Task(this.type, element.i, element.j, element.i + element.j)
+                return new Task(this.type, element.i, element.j, element.i, element.j, element.i + element.j)
                 break;
             case '-':
-                return new Task(this.type, element.i+element.j, element.i, element.j)
+                return new Task(this.type, element.i, element.j, element.i+element.j, element.i, element.j)
                 break;
             case '*':
-                return new Task(this.type, element.i, element.j, element.i * element.j)
+                return new Task(this.type, element.i, element.j, element.i, element.j, element.i * element.j)
                 break;
             case '/':
                 if (element.i == 0) {
                     return this.randomTask();
                 } else {
-                    return new Task(this.type, element.i*element.j, element.i, element.j)
+                    return new Task(this.type, element.i, element.j, element.i*element.j, element.i, element.j)
                 }
                 break;
             default:
@@ -237,12 +236,12 @@ class Training {
     }
 
     correctAnswer (task) {
-        this.table[task.number1][task.number2] = this.table[task.number1][task.number2] / 2;
+        this.table[task.index1][task.index2] = this.table[task.index1][task.index2] / 2;
         this.points.correctAnswer();
     }
 
     wrongAnswer (task) {
-       this.table[task.number1][task.number2] = this.table[task.number1][task.number2] * 2;
+       this.table[task.index1][task.index2] = this.table[task.index1][task.index2] * 2;
        this.points.wrongAnswer();
     }
 
@@ -284,8 +283,10 @@ class Training {
 
 
 class Task {
-    constructor(type, number1, number2, answer) {
+    constructor(type, index1, index2, number1, number2, answer) {
         this.type = type;
+        this.index1 = index1;
+        this.index2 = index2,
         this.number1 = number1;
         this.number2 = number2;
         this.result = answer;
@@ -315,7 +316,7 @@ class Points {
     }
 
     init () {
-        this.counterRight = 0;
+        this.counterRight = 293;
         this.counterWrong = 0;
     }
 

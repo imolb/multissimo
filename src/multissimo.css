@@ -4,11 +4,27 @@ body {
 
 h1 {
     color: black;
-    font-size: medium;
+    font-size: 200%;
+}
+
+#points {
+    font-size: 100%;
+    border-top: solid 1px black;
+    border-bottom: solid 1px black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#pointsL0 {
+    font-size: 150%;
 }
 
 #task {
-    font-size: x-large;
+    font-size: 300%;
+}
+
+input, button, select {
+    font-size: 200%;
 }
 
 output.correct {
