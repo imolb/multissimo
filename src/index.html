@@ -25,16 +25,18 @@
       <h1>Multissimo</h1>
 
       <form action="javascript:checkAnswer()">
+
+        <pre><output id="task"></output></pre>
+        <label for="answer"></label><input type="tel" id="answer" size="4" autocomplete="off">
+        <button type="button" id="sendAnswer">➡️</button>
+        <pre><output id="rating" class="correct"></output></pre>
+
         <div id="points">
           <output id="pointsL0"></output>
           <pre></pre><output id="pointsL1"></output>
           <pre></pre><output id="pointsL2"></output>
           <pre></pre><output id="pointsL3"></output>
         </div>
-        <pre><output id="task"></output></pre>
-        <label for="answer"></label><input type="tel" id="answer" size="4" autocomplete="off">
-        <button type="button" id="sendAnswer">➡️</button>
-        <pre><output id="rating" class="correct"></output></pre>
       </form>
 
       <button type="button" id="toggleSettings">⚙️</button>

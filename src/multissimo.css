@@ -4,13 +4,14 @@ body {
 
 h1 {
     color: black;
-    font-size: 200%;
+    font-size: 75%;
+    border-bottom: solid 3px grey;
 }
 
 #points {
     font-size: 100%;
-    border-top: solid 1px black;
-    border-bottom: solid 1px black;
+    border-top: solid 1px grey;
+    border-bottom: solid 1px grey;
     padding-top: 5px;
     padding-bottom: 5px;
 }
