@@ -31,25 +31,28 @@
         <pre></pre><output id="pointsL3"></output>
         <pre><output id="task"></output></pre>
         <label for="answer"></label><input type="tel" id="answer" size="4">
-        <button type="button" id="sendAnswer">-></button>
+        <button type="button" id="sendAnswer">➡️</button>
         <pre><output id="rating" class="correct"></output></pre>
       </form>
 
-      <form action="javascript:void(0)">
-        <label>
-          <select id="training" name="training" size="1">
-          </select>
-        </label>
-        <label>
-          <select id="theme" name="theme" size="1">
-            <option value="trophy">🏆</option>
-            <option value="unicorn">🦄</option>
-            <option value="rocket">🚀</option>
-          </select>
-        </label>
-      </form>
+      <button type="button" id="toggleSettings">⚙️</button>
+      <div id="settings"  style="display:none">
+        <form action="javascript:void(0)">
+          <label>
+            <select id="training" name="training" size="1">
+            </select>
+          </label>
+          <label>
+            <select id="theme" name="theme" size="1">
+              <option value="trophy">🏆</option>
+              <option value="unicorn">🦄</option>
+              <option value="rocket">🚀</option>
+            </select>
+          </label>
+        </form>
 
-      <table id="statistic"></table>
+        <table id="statistic"></table>
+      </div>
 
       <div id="overlay"></div>
     </main>

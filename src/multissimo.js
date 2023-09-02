@@ -7,8 +7,8 @@
 
  // TODO: set drop down selection to saved selection
  // TODO: consider number1 number2 for / and - are different
- // TODO: wrong answer gives uncauhgt typeError
- // TODO: overlay with huge font size
+ // TODO: Better layout
+
 
  const ThemeIcons = {
     'trophy':  {'ok': '👍', 'nok': '👎', 'L1': '😋', 'L2': '🏅', 'L3': '🏆'},
@@ -315,7 +315,7 @@ class Points {
     }
 
     init () {
-        this.counterRight = 283;
+        this.counterRight = 0;
         this.counterWrong = 0;
     }
 
@@ -324,7 +324,7 @@ class Points {
     }
 
     wrongAnswer () {
-        this.wrongAnswer = this.wrongAnswer + 1;
+        this.counterWrong = this.counterWrong + 1;
     }
     
     pointText () {
@@ -336,9 +336,9 @@ class Points {
         let threshold2 = 10;
         let threshold1 = 1;
     
-        let won3 = Math.floor(countTotal / threshold3);
-        let won2 = Math.floor((countTotal - threshold3*won3) / threshold2);
-        let won1 = Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1);
+        let won3 = Math.max(0, Math.floor(countTotal / threshold3));
+        let won2 = Math.max(0, Math.floor((countTotal - threshold3*won3) / threshold2));
+        let won1 = Math.max(0, Math.floor((countTotal - threshold3*won3 - threshold2*won2) / threshold1));
     
         for (let i=1; i<=won1; i++) {
             pointStatus.L1 = pointStatus.L1 + ThemeIcons[school.theme]['L1'];
@@ -391,6 +391,7 @@ function checkAnswer () {
 
     document.querySelector('#task').textContent = taskText;
     document.querySelector('#rating').setAttribute('class', ratingClass);
+    document.querySelector('#overlay').setAttribute('class', ratingClass);
     updateGui(false);
 
     school.save();
@@ -451,12 +452,25 @@ function changeTheme () {
     updateGui(false);
 }
 
+function toggleSettings () {
+    let divDisplayStyle = document.querySelector('#settings').style.display;
+
+    if (divDisplayStyle == "none") {
+        divDisplayStyle = 'block';
+    } else {
+        divDisplayStyle = 'none';
+    }
+
+    document.querySelector('#settings').style.display = divDisplayStyle;
+}
+
 function updateGui (withNewTask) {
     let pointsText = school.training().points.pointText();
     document.querySelector('#pointsL0').textContent = pointsText.L0;
     document.querySelector('#pointsL1').textContent = pointsText.L1;
     document.querySelector('#pointsL2').textContent = pointsText.L2;
     document.querySelector('#pointsL3').textContent = pointsText.L3;
+    document.querySelector('#answer').focus();
     showTable();
 
     if (withNewTask) {
@@ -468,6 +482,7 @@ function updateGui (withNewTask) {
 function initPage () {
     document.querySelector('#sendAnswer').addEventListener('click', checkAnswer);
     document.querySelector('#theme').addEventListener('change', changeTheme);
+    document.querySelector('#toggleSettings').addEventListener('click', toggleSettings);
     school.load();
     setTrainingSelection();
     updateGui(true);
