@@ -5,10 +5,12 @@
  *
  */
 
+ // TODO: Count time of answer; timeout after x sec? Or weight answer?
+
   const ThemeIcons = {
     'trophy':  {'ok': '👍', 'nok': '👎', 'L1': '😋', 'L2': '🏅', 'L3': '🏆'},
-    'unicorn': {'ok': '🐻', 'nok': '🦨', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
-    'rocket':  {'ok': '🏁', 'nok': '🚩', 'L1': '🚲', 'L2': '🏎️', 'L3': '🚀'}
+    'unicorn': {'ok': '👍', 'nok': '👎', 'L1': '🦓', 'L2': '🐴', 'L3': '🦄'},
+    'rocket':  {'ok': '👍', 'nok': '👎', 'L1': '🚲', 'L2': '🏎️', 'L3': '🚀'}
  }
 
 class School {
@@ -84,6 +86,9 @@ class School {
     }
 
     createDefaultTrainings () {
+        if (this.getTrainingByName('5 + 5') === null) {
+            this.addNewTraining('5 + 5', '+', 11, 11);
+        }
         if (this.getTrainingByName('10 + 10') === null) {
             this.addNewTraining('10 + 10', '+', 11, 11);
         }
@@ -139,7 +144,9 @@ class Training {
                 this.table[i][j] = 1;
 
                 if (this.type == '+' || this.type == '-') {
-                    if (i == 0 || j == 0) {
+                    if (this.name == '5 + 5' && i + j > 10) {
+                        this.table[i][j] = 0;
+                    } else  if (i == 0 || j == 0) {
                         this.table[i][j] = 0.0625;
                     } else if (i == 1 || j == 1) {
                         this.table[i][j] = 0.125;
@@ -267,6 +274,9 @@ class Training {
 
     cellColor(maxMinValue, value) {
         let partition;
+        if (value == 0) {
+            return "rgb(255, 255, 255)";
+        }
         if (maxMinValue.max - maxMinValue.min == 0) {
             partition = "50";
         } else {
