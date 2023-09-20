@@ -92,6 +92,9 @@ class School {
         if (this.getTrainingByName('10 + 10') === null) {
             this.addNewTraining('10 + 10', '+', 11, 11);
         }
+        if (this.getTrainingByName('100 + 10') === null) {
+            this.addNewTraining('100 + 10', '+', 191, 11);
+        }
         if (this.getTrainingByName('20 - 10') === null) {
             this.addNewTraining('20 - 10', '-', 11, 11);
         }
@@ -150,6 +153,8 @@ class Training {
                         this.table[i][j] = 0.0625;
                     } else if (i == 1 || j == 1) {
                         this.table[i][j] = 0.125;
+                    } else if (this.name == '100 + 10' && Math.floor(i/10)==Math.floor((i+j)/10)) {
+                        this.table[i][j] = 0.25;
                     }
                 }
 
@@ -176,7 +181,7 @@ class Training {
         let sum = 0;
 
         for (let i=0; i<this.numRows; i++) {
-            for (let j=0; j<this.numRows; j++) {
+            for (let j=0; j<this.numCols; j++) {
                 sum = sum + this.table[i][j];
             }
         }
@@ -189,7 +194,7 @@ class Training {
         let maxTable = 0;
 
         for (let i=0; i<this.numRows; i++) {
-            for (let j=0; j<this.numRows; j++) {
+            for (let j=0; j<this.numCols; j++) {
                 minTable = Math.min(minTable, this.table[i][j]);
                 maxTable = Math.max(maxTable, this.table[i][j]);
             }
