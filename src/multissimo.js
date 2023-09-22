@@ -382,6 +382,12 @@ function askTask () {
 
 function checkAnswer () {
     let answer = document.querySelector('#answer').value;
+
+    if (typeof answer !== 'string' || answer.length == 0) {
+        // do not consider as answer
+        return;
+    }
+
     let taskText = currentTask.taskTextWithAnswer();
 
     let ratingText = "";
