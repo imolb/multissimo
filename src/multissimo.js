@@ -517,3 +517,10 @@ function initPage () {
     updateGui(true);
 }
 window.addEventListener('load', initPage)
+
+const beforeUnloadListener = (event) => {
+  event.preventDefault();
+  return (event.returnValue = "");
+};
+
+window.addEventListener('beforeunload', beforeUnloadListener);
