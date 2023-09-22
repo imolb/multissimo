@@ -388,6 +388,15 @@ function checkAnswer () {
         return;
     }
 
+    // check for cheat code to modify right/wrong counters
+    let matches = answer.match(/^###(\d+)#(\d+)###$/);
+    if (matches) {
+        school.training().points.counterRight = parseInt(matches[1]);
+        school.training().points.counterWrong = parseInt(matches[2]);
+        updateGui(false);
+        return;
+    }
+
     let taskText = currentTask.taskTextWithAnswer();
 
     let ratingText = "";
