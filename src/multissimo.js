@@ -176,6 +176,9 @@ class Training {
             } else if (Math.floor((i+j) / 10) * 10 === (i + j)) {
               // 1st operator is multiple of 10 --> easy
               this.table[i][j] = 0.125
+            } else if (Math.floor(i / 10) * 10 === i) {
+              // 2nd operator is multiple of 10 --> easy
+              this.table[i][j] = 0.125
             } else if ((((i+j) - Math.floor((i + j) / 10) * 10) >= (i - Math.floor(i / 10) * 10)))  {
               // no crossing of ten-border --> easy
               this.table[i][j] = 0.5
