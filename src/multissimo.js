@@ -395,6 +395,11 @@ function checkAnswer () {
     updateGui(false)
     return
   }
+  if (answer === '###0000###') {
+    school.training().initTable();
+    updateGui(false)
+    return
+  }
 
   let taskText = currentTask.taskTextWithAnswer()
 
