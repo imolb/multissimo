@@ -105,6 +105,9 @@ class School {
     if (this.getTrainingByName('100 : 10') === null) {
       this.addNewTraining('100 : 10', '/', 11, 11)
     }
+    if (this.getTrainingByName('100 - 10') === null) {
+      this.addNewTraining('100 - 10', '-', 101, 101)
+    }
   }
 }
 
@@ -149,6 +152,8 @@ class Training {
 
         if (this.type === '+' || this.type === '-') {
           if (this.name === '5 + 5' && i + j > 10) {
+            this.table[i][j] = 0
+          } else if (this.name === '100 - 10' && i + j > 100) {
             this.table[i][j] = 0
           } else if (i === 0 || j === 0) {
             this.table[i][j] = 0.0625
