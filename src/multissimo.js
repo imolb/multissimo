@@ -151,16 +151,35 @@ class Training {
         this.table[i][j] = 1
 
         if (this.type === '+' || this.type === '-') {
-          if (this.name === '5 + 5' && i + j > 10) {
-            this.table[i][j] = 0
-          } else if (this.name === '100 - 10' && i + j > 100) {
-            this.table[i][j] = 0
-          } else if (i === 0 || j === 0) {
+          if (i === 0 || j === 0) {
+            // one operator is 0 --> very easy
             this.table[i][j] = 0.0625
           } else if (i === 1 || j === 1) {
+            // one operator is 1 --> easy
             this.table[i][j] = 0.125
+          } else if (this.name === '5 + 5' && i + j > 10) {
+            // limit to maximal result of 10
+            this.table[i][j] = 0
           } else if (this.name === '100 + 10' && Math.floor(i / 10) === Math.floor((i + j) / 10)) {
+            // no crossing of ten-border --> easy
             this.table[i][j] = 0.25
+          } else if (this.name === '100 - 10') {
+            if (i + j > 100) {
+              // limit to maximal value of 100
+              this.table[i][j] = 0
+            } else if (i + j < 10) {
+              // 1st operator is below 10 --> very easy
+              this.table[i][j] = 0.0625
+            } else if (i < 10) {
+              // 2nd operator is below 10 --> easy
+              this.table[i][j] = 0.125
+            } else if (Math.floor((i+j) / 10) * 10 === (i + j)) {
+              // 1st operator is multiple of 10 --> easy
+              this.table[i][j] = 0.125
+            } else if ((((i+j) - Math.floor((i + j) / 10) * 10) >= (i - Math.floor(i / 10) * 10)))  {
+              // no crossing of ten-border --> easy
+              this.table[i][j] = 0.5
+            }
           }
         }
 
