@@ -113,7 +113,7 @@ div.wrong {
 #collectionIcon.challengeEnd {
     position: fixed;
     left: 0px;
-    font-size: 200%;
+    font-size: 400%;
     text-align: center;
     width: 100%;
     /*transition: font-size 3s ease-in-out 0s;*/
