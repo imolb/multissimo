@@ -691,13 +691,13 @@ class CollectionItem {
 class Level {
 }
 Object.defineProperty(Level, 'answerLimit', {
-    value: new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
+    value: new Array(5, 10, 15, 20, 25, 30, 35, 40),
     writable : false,
     enumerable : true,
     configurable : false
 });
 Object.defineProperty(Level, 'timeLimit', {
-    value: new Array(5*60, 5*60, 10*60, 10*60, 15*60, 15*60, 20*60, 20*60, 25*60, 25*60),
+    value: new Array(5*60, 10*40, 15*30, 20*20, 25*15, 30*10, 35*7, 40*5),
     writable : false,
     enumerable : true,
     configurable : false
