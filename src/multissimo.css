@@ -116,7 +116,7 @@ div.wrong {
     font-size: 400%;
     text-align: center;
     width: 100%;
-    /*transition: font-size 3s ease-in-out 0s;*/
+    /*transition: font-size 3s ease-in-out 0s; // disabled due to problem in old chrome */
 }
 
 #challengeProgress > svg {

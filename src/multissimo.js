@@ -185,11 +185,11 @@ class School {
     let trainingListDefinition = [];
     trainingListDefinition.push({'name':    '5 + 5', 'type': '+', 'numRows':  11, 'numCols':  11})
     trainingListDefinition.push({'name':  '10 + 10', 'type': '+', 'numRows':  11, 'numCols':  11})
-    /* TODO add trainingListDefinition.push({'name':  '20 - 10', 'type': '-', 'numRows':  11, 'numCols':  11})
+    trainingListDefinition.push({'name':  '20 - 10', 'type': '-', 'numRows':  11, 'numCols':  11})
     trainingListDefinition.push({'name': '100 + 10', 'type': '+', 'numRows': 191, 'numCols':  11})
     trainingListDefinition.push({'name': '100 - 10', 'type': '-', 'numRows': 101, 'numCols': 101})
     trainingListDefinition.push({'name':  '10 * 10', 'type': '*', 'numRows':  11, 'numCols':  11})
-    trainingListDefinition.push({'name': '100 : 10', 'type': '/', 'numRows':  11, 'numCols':  11})*/
+    trainingListDefinition.push({'name': '100 : 10', 'type': '/', 'numRows':  11, 'numCols':  11})
 
     for (let i = 0; i < trainingListDefinition.length; i++) {
       if (this.getTrainingByName(trainingListDefinition.name) === null) {
@@ -691,13 +691,13 @@ class CollectionItem {
 class Level {
 }
 Object.defineProperty(Level, 'answerLimit', {
-    value: new Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), //(10, 20, 30, 40),
+    value: new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
     writable : false,
     enumerable : true,
     configurable : false
 });
 Object.defineProperty(Level, 'timeLimit', {
-    value: new Array(10, 20, 30, 40, 50, 60, 70, 80, 90, 100), //(5*60, 7.5*60, 10*60, 12.5*60),
+    value: new Array(5*60, 5*60, 10*60, 10*60, 15*60, 15*60, 20*60, 20*60, 25*60, 25*60),
     writable : false,
     enumerable : true,
     configurable : false
