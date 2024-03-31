@@ -20,45 +20,77 @@
   </head>
 
   <body>
+    <header>
+      <h1>Multissimo</h1>
+      <div id="configuration">{username} {trainingname}</div>
+      <div id="logo"><img src="multissimo_32x.png" alt="logo"></div>
+    </header>
 
     <main>
-      <h1>Multissimo</h1>
-
-      <form action="javascript:checkAnswer()">
-
-        <pre><output id="task"></output></pre>
-        <label for="answer"></label><input type="tel" id="answer" size="4" autocomplete="off">
-        <button type="button" id="sendAnswer">➡️</button>
-        <pre><output id="rating" class="correct"></output></pre>
-
-        <div id="points">
-          <output id="pointsL0"></output>
-          <pre></pre><output id="pointsL1"></output>
-          <pre></pre><output id="pointsL2"></output>
-          <pre></pre><output id="pointsL3"></output>
+      <div id="navigation">
+        <div id="buttonbar">
+          <button type="button" id="togglePlay">🟰</button>
+          <button type="button" id="toggleCollection">🪟</button>
+          <button type="button" id="toggleStats">📊</button>
         </div>
-      </form>
-
-      <button type="button" id="toggleSettings">⚙️</button>
-      <div id="settings"  style="display:none">
-        <form action="javascript:void(0)">
-          <label>
-            <select id="training" name="training" size="1">
-            </select>
-          </label>
-          <label>
-            <select id="theme" name="theme" size="1">
-              <option value="trophy">🏆</option>
-              <option value="unicorn">🦄</option>
-              <option value="rocket">🚀</option>
-            </select>
-          </label>
-        </form>
-
-        <table id="statistic"></table>
       </div>
 
-      <div id="overlay"></div>
+      <div id="content">
+        <div id="play">
+          <div id="playContent">
+            <div id="challengeProgress">
+              <svg width="100" height="100" viewBox="0 0 100 100" class="circular-progress" style="--progress: 0" id="countdown">
+                <circle class="bg"></circle>
+                <circle class="fg"></circle>
+              </svg>
+
+              <svg width="74" height="74" viewBox="0 0 74 74" class="circular-progress" style="--progress: 0" id="answersCounter">
+                <circle class="bg"></circle>
+                <circle class="fg"></circle>
+              </svg>
+
+              <div id="center">
+                <output id="collectionIcon" class="normal"></output>
+              </div>
+            </div>
+
+            <div id="taskAnswer">
+              <form action="javascript:checkAnswer()">
+                <pre><output id="task"></output></pre>
+                <label for="answer"></label><input type="tel" id="answer" size="4" autocomplete="off">
+                <button type="button" id="sendAnswer">➡️</button>
+                <pre><output id="rating" class="correct"></output></pre>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div id="collection">
+          <div id="collectionList">
+          </div>
+
+          <form action="javascript:void(0)">
+            <label>
+              <select id="training" name="training" size="1">
+              </select>
+            </label>
+            <label>
+              <select id="user" name="user" size="1">
+              </select>
+            </label>
+            <button type="button" id="newUser">➕🧑</button>
+            <button type="button" id="deleteUser">➖🧑</button>
+          </form>
+        </div>
+
+        <div id="stats">
+          <div id="points"></div>
+
+          <div id="statistic"></div>
+        </div>
+      </div>
+
+      <!-- TODO not used anymore? <div id="overlay"></div> -->
     </main>
   </body>
 </html>
