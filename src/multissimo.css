@@ -150,7 +150,7 @@ div.wrong {
   --half-size: calc(var(--size) / 2);
   --stroke-width: 10px;
   --radius: calc((var(--size) - var(--stroke-width)) / 2);
-  --circumference: calc(var(--radius) * pi * 2);
+  --circumference: calc(var(--radius) * 3.141 * 2);
   --dash: calc((var(--progress) * var(--circumference)) / 100);
 }
 

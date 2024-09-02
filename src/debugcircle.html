@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
+  <!-- https://developer.chrome.com/docs/devtools/remote-debugging?hl=de -->
+
   <style>
   #countdown {
   --size: 100px;
@@ -31,7 +33,7 @@
   --half-size: calc(var(--size) / 2);
   --stroke-width: 10px;
   --radius: calc((var(--size) - var(--stroke-width)) / 2);
-  --circumference: calc(var(--radius) * pi * 2);
+  --circumference: calc(var(--radius) * 3.141 * 2);
   --dash: calc((var(--progress) * var(--circumference)) / 100);
   }
 
