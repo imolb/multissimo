@@ -953,6 +953,8 @@ function updateGuiPlay (withNewTask) {
 }
 
 function initPage () {
+  registerServiceWorker()
+
   document.querySelector('#sendAnswer').addEventListener('click', checkAnswer)
 
   document.querySelector('#togglePlay').addEventListener('click', function() {toggleContent('#play')})
@@ -977,6 +979,19 @@ window.addEventListener('load', initPage)
 const beforeUnloadListener = (event) => {
   event.preventDefault()
   return (event.returnValue = '')
+}
+
+// Registers a service worker
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register("serviceworker.js");
+    } catch (error) {
+      console.error("Error while registering: " + error.message);
+    }
+  } else {
+      console.error("Service workers API not available");
+  }
 }
 
 //window.addEventListener('beforeunload', beforeUnloadListener)
