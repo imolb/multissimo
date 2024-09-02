@@ -976,11 +976,6 @@ function initPage () {
 }
 window.addEventListener('load', initPage)
 
-const beforeUnloadListener = (event) => {
-  event.preventDefault()
-  return (event.returnValue = '')
-}
-
 // Registers a service worker
 async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -993,5 +988,3 @@ async function registerServiceWorker() {
       console.error("Service workers API not available");
   }
 }
-
-//window.addEventListener('beforeunload', beforeUnloadListener)
