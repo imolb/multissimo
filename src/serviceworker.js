@@ -3,6 +3,7 @@
 /**
  * serviceworker.js
  *
+ * Last update: 02.09.2024 23:14
  */
 
 const urlsToCache = ["favicon.ico", "index.html", "multissimo.css", "multissimo.js", "multissimo.webmanifest",
