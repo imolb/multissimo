@@ -43,6 +43,7 @@ main {
 
 #navigation button {
     font-size: 100%;
+    user-select: none;
 }
 
 #content {
@@ -85,10 +86,12 @@ div.wrong {
 
 #taskAnswer button {
     font-size: 200%;
+    user-select: none;
 }
 
 #taskAnswer input {
     font-size: 200%;
+    user-select: none;
 }
 
 /* ------------------- PLAY | PROGRESS CIRCLE------------------------- */
@@ -189,6 +192,7 @@ div.collectionItem {
     text-align: center;
     min-height: 2em;
     position: relative;
+    user-select: none;
 }
 
 div.open:after {
