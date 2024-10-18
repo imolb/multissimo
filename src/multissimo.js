@@ -425,6 +425,7 @@ class Task {
     this.number1 = number1
     this.number2 = number2
     this.result = answer
+    this.isAnswered = false
   }
 
   taskText () {
@@ -743,6 +744,12 @@ function checkAnswer () {
     updateGuiPlay(false)
     return
   }
+
+  if (task.isAnswered === true) {
+    // already answered and points counted
+    return
+  }
+  task.isAnswered = true
 
   let taskText = task.taskTextWithAnswer()
 
