@@ -31,12 +31,12 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@8.10.0
+          npm install eslint@9.12.0 neostandard@0.11.6
           npm install @microsoft/eslint-formatter-sarif@2.1.7
 
       - name: Run ESLint
         run: npx eslint .
-          --config config/.eslintrc.json
+          --config config/eslint.config.mjs
           --ext .js
           --format @microsoft/eslint-formatter-sarif
           --output-file eslint-results.sarif
