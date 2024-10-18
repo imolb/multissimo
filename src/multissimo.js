@@ -9,9 +9,8 @@
 // TODO: Concept for navigation buttons
 // TODO: Consideration of optimized saving (only per user; or only after specific delay)
 
-
 const CollectionIcons = {
-  mammals: new Array(
+  mammals: [
     '🐌', '🦋', '🐝', '🐞', '🦗', '🪳', '🦂', '🦟', '🪰', '🪱',
     '🐊', '🐢', '🦎', '🦕', '🦖', '🐋', '🐬', '🦭', '🐟', '🐠',
     '🐤', '🐥', '🐧', '🦅', '🦆', '🦢', '🦉', '🦩', '🦚', '🦜',
@@ -20,9 +19,8 @@ const CollectionIcons = {
     '🐒', '🦍', '🦧', '🐺', '🦊', '🐄', '🐷', '🐖', '🐗', '🐑',
     '🦬', '🐂', '🐃', '🐐', '🐪', '🦙', '🦒', '🐅', '🐆', '🦓',
     '🐘', '🦣', '🦏', '🦛', '🦁', '🐯', '🦄', '🐴', '🐫', '🐎'
-  )
+  ]
 }
-
 
 class UserManagement {
   constructor () {
@@ -31,7 +29,7 @@ class UserManagement {
   }
 
   load () {
-    const thisLoaded = JSON.parse(localStorage.getItem('userManagement'))
+    const thisLoaded = JSON.parse(window.localStorage.getItem('userManagement'))
 
     if (thisLoaded) {
       this.userList = new Array(0)
@@ -42,7 +40,7 @@ class UserManagement {
       // user is stored as index in JSON object
       if (thisLoaded.user < this.userList.length) {
         this.user = this.userList[thisLoaded.user]
-      } else if (this.userList.length > 0){
+      } else if (this.userList.length > 0) {
         this.user = this.userList[0]
       }
     } else {
@@ -54,11 +52,11 @@ class UserManagement {
 
   save () {
     const jsonString = JSON.stringify(this, this.jsonReplace.bind(this), ' ')
-    //console.log(jsonString)
-    localStorage.setItem('userManagement', jsonString)
+    // console.log(jsonString)
+    window.localStorage.setItem('userManagement', jsonString)
   }
 
-  jsonReplace(key, value) {
+  jsonReplace (key, value) {
     if (key === 'user') {
       return this.getUserIndex()
     } else if (key === 'training') {
@@ -83,7 +81,7 @@ class UserManagement {
   }
 
   userNameList () {
-    let userNameList = new Array()
+    const userNameList = Array => new Array()
     for (let i = 0; i < this.userList.length; i++) {
       userNameList.push(this.userList[i].userName)
     }
@@ -113,7 +111,6 @@ class UserManagement {
   }
 }
 
-
 class School {
   constructor (jsObject) {
     if (arguments.length === 0) {
@@ -137,7 +134,7 @@ class School {
       // training is stored as index in JSON jsObject
       if (jsObject.training < this.trainingList.length) {
         this.training = this.trainingList[jsObject.training]
-      } else if (this.trainingList.length > 0){
+      } else if (this.trainingList.length > 0) {
         this.training = this.trainingList[0]
       }
     } else {
@@ -170,7 +167,7 @@ class School {
   }
 
   trainingNameList () {
-    let trainingNameList = new Array()
+    const trainingNameList = Array => new Array()
     for (let i = 0; i < this.trainingList.length; i++) {
       trainingNameList.push(this.trainingList[i].name)
     }
@@ -182,14 +179,14 @@ class School {
   }
 
   createDefaultTrainings () {
-    let trainingListDefinition = [];
-    trainingListDefinition.push({'name':    '5 + 5', 'type': '+', 'numRows':  11, 'numCols':  11})
-    trainingListDefinition.push({'name':  '10 + 10', 'type': '+', 'numRows':  11, 'numCols':  11})
-    trainingListDefinition.push({'name':  '20 - 10', 'type': '-', 'numRows':  11, 'numCols':  11})
-    trainingListDefinition.push({'name': '100 + 10', 'type': '+', 'numRows': 191, 'numCols':  11})
-    trainingListDefinition.push({'name': '100 - 10', 'type': '-', 'numRows': 101, 'numCols': 101})
-    trainingListDefinition.push({'name':  '10 * 10', 'type': '*', 'numRows':  11, 'numCols':  11})
-    trainingListDefinition.push({'name': '100 : 10', 'type': '/', 'numRows':  11, 'numCols':  11})
+    const trainingListDefinition = []
+    trainingListDefinition.push({ name: '5 + 5', type: '+', numRows: 11, numCols: 11 })
+    trainingListDefinition.push({ name: '10 + 10', type: '+', numRows: 11, numCols: 11 })
+    trainingListDefinition.push({ name: '20 - 10', type: '-', numRows: 11, numCols: 11 })
+    trainingListDefinition.push({ name: '100 + 10', type: '+', numRows: 191, numCols: 11 })
+    trainingListDefinition.push({ name: '100 - 10', type: '-', numRows: 101, numCols: 101 })
+    trainingListDefinition.push({ name: '10 * 10', type: '*', numRows: 11, numCols: 11 })
+    trainingListDefinition.push({ name: '100 : 10', type: '/', numRows: 11, numCols: 11 })
 
     for (let i = 0; i < trainingListDefinition.length; i++) {
       if (this.getTrainingByName(trainingListDefinition.name) === null) {
@@ -274,13 +271,13 @@ class Training {
             } else if (i < 10) {
               // 2nd operator is below 10 --> easy
               this.probabilityTable[i][j] = 0.125
-            } else if (Math.floor((i+j) / 10) * 10 === (i + j)) {
+            } else if (Math.floor((i + j) / 10) * 10 === (i + j)) {
               // 1st operator is multiple of 10 --> easy
               this.probabilityTable[i][j] = 0.125
             } else if (Math.floor(i / 10) * 10 === i) {
               // 2nd operator is multiple of 10 --> easy
               this.probabilityTable[i][j] = 0.125
-            } else if ((((i+j) - Math.floor((i + j) / 10) * 10) >= (i - Math.floor(i / 10) * 10)))  {
+            } else if ((((i + j) - Math.floor((i + j) / 10) * 10) >= (i - Math.floor(i / 10) * 10))) {
               // no crossing of ten-border --> easy
               this.probabilityTable[i][j] = 0.5
             }
@@ -448,7 +445,7 @@ class Points {
     if (arguments.length === 0) {
       // empty object
       this.initEmptyInstance()
-    } else if (arguments.length === 1 && typeof jsObject === 'object'){
+    } else if (arguments.length === 1 && typeof jsObject === 'object') {
       this.counterRight = jsObject.counterRight
       this.counterWrong = jsObject.counterWrong
     } else {
@@ -490,7 +487,7 @@ class Points {
     appendRepeatedIcons(divPoints, won2, '🏅')
     appendRepeatedIcons(divPoints, won3, '🏆')
 
-    function appendRepeatedIcons(parentDiv, count, icon) {
+    function appendRepeatedIcons (parentDiv, count, icon) {
       let textContent = ''
       for (let i = 1; i <= count; i++) {
         textContent += icon
@@ -567,8 +564,6 @@ class Challenge {
     this.challengeStart(this.collectionItem)
   }
 
-
-
   challengeStop () {
     if (this.windowIntervalCallback) {
       window.clearInterval(this.windowIntervalCallback)
@@ -577,8 +572,8 @@ class Challenge {
   }
 
   updateCountdown () {
-    let timeElapsed = performance.now() - this.startTime
-    let percentElapsed = 100 * timeElapsed / (this.timeLimit * 1000)
+    const timeElapsed = performance.now() - this.startTime
+    const percentElapsed = 100 * timeElapsed / (this.timeLimit * 1000)
     document.querySelector('#countdown').style.setProperty('--progress', percentElapsed)
     if (percentElapsed >= 100) {
       this.challengeLost()
@@ -586,7 +581,7 @@ class Challenge {
   }
 
   updateAnswersCounter () {
-    let percentAnswered = 100 * (this.answersDone / this.answerLimit)
+    const percentAnswered = 100 * (this.answersDone / this.answerLimit)
     document.querySelector('#answersCounter').style.setProperty('--progress', percentAnswered)
   }
 }
@@ -598,8 +593,8 @@ class Collection {
       this.initEmptyInstance()
     } else if (arguments.length === 1 && typeof jsObject === 'object') {
       // jsObject is JSON, Initialize object with data from JSON jsObject
-      this.itemList = new Array()
-      for (let i = 0; i<jsObject.itemList.length; i++) {
+      this.itemList = Array => new Array()
+      for (let i = 0; i < jsObject.itemList.length; i++) {
         this.itemList.push(new CollectionItem(jsObject.itemList[i]))
       }
     } else {
@@ -608,9 +603,9 @@ class Collection {
   }
 
   initEmptyInstance () {
-    this.itemList = new Array(0);
-    for (let i = 0; i<CollectionIcons.mammals.length; i++) {
-      let level = Math.floor(i / 10);
+    this.itemList = new Array(0)
+    for (let i = 0; i < CollectionIcons.mammals.length; i++) {
+      const level = Math.floor(i / 10)
       this.itemList.push(new CollectionItem(CollectionIcons.mammals[i], level))
     }
   }
@@ -619,8 +614,8 @@ class Collection {
     const collectionDiv = document.createElement('div')
     collectionDiv.setAttribute('id', 'collection')
 
-    let divItems = new Array()
-    for (let level = 0; level <= Level.max; level ++){
+    const divItems = Array => new Array()
+    for (let level = 0; level <= Level.max; level++) {
       const divLevel = document.createElement('div')
       const divLevelInfo = createElementWithText('div', Level.symbol[level] + ' ' + Level.answerLimit[level] + '✔ ' + Level.timeLimit[level] + ' s')
       divLevelInfo.setAttribute('class', 'levelInfo')
@@ -671,51 +666,48 @@ class CollectionItem {
     const div = createElementWithText('div', this.icon)
 
     if (this.won >= 1) {
-      div.setAttribute('class', 'collectionItem won');
+      div.setAttribute('class', 'collectionItem won')
       if (this.won > 1) {
         const divWon = createElementWithText('div', this.won)
         div.appendChild(divWon)
         divWon.setAttribute('class', 'wonCount')
       }
     } else {
-      div.setAttribute('class', 'collectionItem open');
+      div.setAttribute('class', 'collectionItem open')
     }
 
-    div.addEventListener('click', function () {collectionItemSelected(this)}.bind(this))
+    div.addEventListener('click', function () { collectionItemSelected(this) }.bind(this))
 
     return div
   }
 }
 
-
 class Level {
 }
 Object.defineProperty(Level, 'answerLimit', {
-    value: new Array(5, 10, 15, 20, 25, 30, 35, 40),
-    writable : false,
-    enumerable : true,
-    configurable : false
-});
+  value: [5, 10, 15, 20, 25, 30, 35, 40],
+  writable: false,
+  enumerable: true,
+  configurable: false
+})
 Object.defineProperty(Level, 'timeLimit', {
-    value: new Array(5*60, 10*40, 15*30, 20*20, 25*15, 30*10, 35*7, 40*5),
-    writable : false,
-    enumerable : true,
-    configurable : false
-});
+  value: [5 * 60, 10 * 40, 15 * 30, 20 * 20, 25 * 15, 30 * 10, 35 * 7, 40 * 5],
+  writable: false,
+  enumerable: true,
+  configurable: false
+})
 Object.defineProperty(Level, 'symbol', {
-    value: new Array('🧸', '👶', '👧', '🤔', '💪', '🏋️', '💡', '🧠'),
-    writable : false,
-    enumerable : true,
-    configurable : false
-});
+  value: ['🧸', '👶', '👧', '🤔', '💪', '🏋️', '💡', '🧠'],
+  writable: false,
+  enumerable: true,
+  configurable: false
+})
 Object.defineProperty(Level, 'max', {
-    value: 7,
-    writable : false,
-    enumerable : true,
-    configurable : false
-});
-
-
+  value: 7,
+  writable: false,
+  enumerable: true,
+  configurable: false
+})
 
 const userManagement = new UserManagement()
 
@@ -743,11 +735,11 @@ function checkAnswer () {
   if (matches) {
     userManagement.user.training.points.counterRight = parseInt(matches[1])
     userManagement.user.training.points.counterWrong = parseInt(matches[2])
-    updateGui(false)
+    updateGuiPlay(false)
     return
   }
   if (answer === '###0000###') {
-    userManagement.user.training.initProbabilityTableTable();
+    userManagement.user.training.initProbabilityTableTable()
     updateGuiPlay(false)
     return
   }
@@ -788,7 +780,7 @@ function checkAnswer () {
 
 function challengeLostAnimation () {
   document.querySelector('#collectionIcon').textContent = '❌'
-  challengeEndAnimation(true);
+  challengeEndAnimation(true)
 }
 
 function challengeEndAnimation (retry) {
@@ -799,7 +791,7 @@ function challengeEndAnimation (retry) {
     if (!retry) {
       toggleContent('#collection')
     }
-    }, 3000)
+  }, 3000)
 }
 
 const removeChildren = (parent) => {
@@ -871,7 +863,7 @@ function changeUser () {
 }
 
 function addUser () {
-  let newName = prompt('Name', 'Harry')
+  const newName = window.prompt('Name', 'Harry')
   if (newName != null && typeof newName === 'string' && newName.length > 1) {
     userManagement.addUser(newName)
   }
@@ -880,7 +872,7 @@ function addUser () {
 }
 
 function deleteUser () {
-  let password = prompt('Confirm super password', '***')
+  const password = window.prompt('Confirm super password', '***')
   if (password === '###') {
     userManagement.removeUser()
   }
@@ -888,13 +880,13 @@ function deleteUser () {
   updateGuiCollection()
 }
 
-function collectionItemSelected(collectionItem) {
+function collectionItemSelected (collectionItem) {
   challenge = new Challenge(collectionItem)
   toggleContent('#play', true)
 }
 
 function toggleContent (idToShow, withNewTask) {
-  let htmlDivIds = new Array('#play', '#collection', '#stats')
+  const htmlDivIds = ['#play', '#collection', '#stats']
 
   if (document.querySelector(idToShow).style.display !== 'none') {
     // already shown; show play-div
@@ -902,7 +894,7 @@ function toggleContent (idToShow, withNewTask) {
   }
 
   for (let i = 0; i < htmlDivIds.length; i++) {
-    if (htmlDivIds[i] == idToShow) {
+    if (htmlDivIds[i] === idToShow) {
       document.querySelector(htmlDivIds[i]).style.display = 'block'
     } else {
       document.querySelector(htmlDivIds[i]).style.display = 'none'
@@ -957,9 +949,9 @@ function initPage () {
 
   document.querySelector('#sendAnswer').addEventListener('click', checkAnswer)
 
-  document.querySelector('#togglePlay').addEventListener('click', function() {toggleContent('#play')})
-  document.querySelector('#toggleCollection').addEventListener('click', function() {toggleContent('#collection')})
-  document.querySelector('#toggleStats').addEventListener('click', function() {toggleContent('#stats')})
+  document.querySelector('#togglePlay').addEventListener('click', function () { toggleContent('#play') })
+  document.querySelector('#toggleCollection').addEventListener('click', function () { toggleContent('#collection') })
+  document.querySelector('#toggleStats').addEventListener('click', function () { toggleContent('#stats') })
   document.querySelector('#newUser').addEventListener('click', addUser)
   document.querySelector('#deleteUser').addEventListener('click', deleteUser)
 
@@ -977,14 +969,14 @@ function initPage () {
 window.addEventListener('load', initPage)
 
 // Registers a service worker
-async function registerServiceWorker() {
+async function registerServiceWorker () {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register("serviceworker.js");
+      await navigator.serviceWorker.register('serviceworker.js')
     } catch (error) {
-      console.error("Error while registering: " + error.message);
+      console.error('Error while registering: ' + error.message)
     }
   } else {
-      console.error("Service workers API not available");
+    console.error('Service workers API not available')
   }
 }
