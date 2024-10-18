@@ -10,7 +10,7 @@
 // TODO: Consideration of optimized saving (only per user; or only after specific delay)
 
 const CollectionIcons = {
-  mammals: [
+  mammals: new Array(
     '🐌', '🦋', '🐝', '🐞', '🦗', '🪳', '🦂', '🦟', '🪰', '🪱',
     '🐊', '🐢', '🦎', '🦕', '🦖', '🐋', '🐬', '🦭', '🐟', '🐠',
     '🐤', '🐥', '🐧', '🦅', '🦆', '🦢', '🦉', '🦩', '🦚', '🦜',
@@ -19,7 +19,7 @@ const CollectionIcons = {
     '🐒', '🦍', '🦧', '🐺', '🦊', '🐄', '🐷', '🐖', '🐗', '🐑',
     '🦬', '🐂', '🐃', '🐐', '🐪', '🦙', '🦒', '🐅', '🐆', '🦓',
     '🐘', '🦣', '🦏', '🦛', '🦁', '🐯', '🦄', '🐴', '🐫', '🐎'
-  ]
+  )
 }
 
 class UserManagement {
@@ -81,7 +81,7 @@ class UserManagement {
   }
 
   userNameList () {
-    const userNameList = Array => new Array()
+    const userNameList = new Array()
     for (let i = 0; i < this.userList.length; i++) {
       userNameList.push(this.userList[i].userName)
     }
@@ -167,7 +167,7 @@ class School {
   }
 
   trainingNameList () {
-    const trainingNameList = Array => new Array()
+    const trainingNameList = new Array()
     for (let i = 0; i < this.trainingList.length; i++) {
       trainingNameList.push(this.trainingList[i].name)
     }
@@ -593,7 +593,7 @@ class Collection {
       this.initEmptyInstance()
     } else if (arguments.length === 1 && typeof jsObject === 'object') {
       // jsObject is JSON, Initialize object with data from JSON jsObject
-      this.itemList = Array => new Array()
+      this.itemList = new Array()
       for (let i = 0; i < jsObject.itemList.length; i++) {
         this.itemList.push(new CollectionItem(jsObject.itemList[i]))
       }
@@ -614,7 +614,7 @@ class Collection {
     const collectionDiv = document.createElement('div')
     collectionDiv.setAttribute('id', 'collection')
 
-    const divItems = Array => new Array()
+    const divItems = new Array()
     for (let level = 0; level <= Level.max; level++) {
       const divLevel = document.createElement('div')
       const divLevelInfo = createElementWithText('div', Level.symbol[level] + ' ' + Level.answerLimit[level] + '✔ ' + Level.timeLimit[level] + ' s')
@@ -685,19 +685,19 @@ class CollectionItem {
 class Level {
 }
 Object.defineProperty(Level, 'answerLimit', {
-  value: [5, 10, 15, 20, 25, 30, 35, 40],
+  value: new Array(5, 10, 15, 20, 25, 30, 35, 40),
   writable: false,
   enumerable: true,
   configurable: false
 })
 Object.defineProperty(Level, 'timeLimit', {
-  value: [5 * 60, 10 * 40, 15 * 30, 20 * 20, 25 * 15, 30 * 10, 35 * 7, 40 * 5],
+  value: new Array(5 * 60, 10 * 40, 15 * 30, 20 * 20, 25 * 15, 30 * 10, 35 * 7, 40 * 5),
   writable: false,
   enumerable: true,
   configurable: false
 })
 Object.defineProperty(Level, 'symbol', {
-  value: ['🧸', '👶', '👧', '🤔', '💪', '🏋️', '💡', '🧠'],
+  value: new Array('🧸', '👶', '👧', '🤔', '💪', '🏋️', '💡', '🧠'),
   writable: false,
   enumerable: true,
   configurable: false
@@ -886,7 +886,7 @@ function collectionItemSelected (collectionItem) {
 }
 
 function toggleContent (idToShow, withNewTask) {
-  const htmlDivIds = ['#play', '#collection', '#stats']
+  const htmlDivIds = new Array('#play', '#collection', '#stats')
 
   if (document.querySelector(idToShow).style.display !== 'none') {
     // already shown; show play-div
