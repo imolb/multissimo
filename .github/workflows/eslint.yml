@@ -15,7 +15,6 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
-  workflow_dispatch:
 
 jobs:
   eslint:
@@ -27,23 +26,26 @@ jobs:
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install ESLint
         run: |
-          npm install eslint@8.10.0
-          npm install @microsoft/eslint-formatter-sarif@2.1.7
+          npm install eslint@9.12.0 neostandard@0.11.6
+          npm install @microsoft/eslint-formatter-sarif@3.1.0
 
       - name: Run ESLint
+        env:
+          SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
         run: npx eslint .
-          --config config/.eslintrc.json
-          --ext .js
+          --config config/eslint.config.mjs
           --format @microsoft/eslint-formatter-sarif
           --output-file eslint-results.sarif
+        continue-on-error: true
 
-      - name: Upload analysis results to GitHub actions log
-        if: success() || failure()
-        uses: actions/upload-artifact@v3
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
         with:
           name: eslint-results.sarif
           path: eslint-results.sarif
+          sarif_file: eslint-results.sarif
+          wait-for-processing: true
