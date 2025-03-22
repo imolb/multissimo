@@ -187,6 +187,7 @@ class School {
     trainingListDefinition.push({ name: '100 - 10', type: '-', numRows: 101, numCols: 101 })
     trainingListDefinition.push({ name: '10 * 10', type: '*', numRows: 11, numCols: 11 })
     trainingListDefinition.push({ name: '100 : 10', type: '/', numRows: 11, numCols: 11 })
+    trainingListDefinition.push({ name: '10 * 10 (0, 1, 2, 5, 10, Q)', type: '*', numRows: 11, numCols: 11 })
 
     for (let i = 0; i < trainingListDefinition.length; i++) {
       if (this.getTrainingByName(trainingListDefinition.name) === null) {
@@ -285,16 +286,29 @@ class Training {
         }
 
         if (this.operator === '*' || this.operator === '/') {
-          if (i === 0 || j === 0) {
-            if (this.operator === '/') {
-              this.probabilityTable[i][j] = 0
+          if (this.name === '10 * 10 (0, 1, 2, 5, 10, Q)') {
+            if (i === 0 || j === 0 || i === 1 || j === 1) {
+              this.probabilityTable[i][j] = 0.125
+            } else if (i === 10 || j === 10){
+              this.probabilityTable[i][j] = 0.25
+            } else if (i === 2 || j === 2 || i === 5 || j === 5 || i === j) {
+              this.probabilityTable[i][j] = 1
             } else {
-              this.probabilityTable[i][j] = 0.0625
+              this.probabilityTable[i][j] = 0
             }
-          } else if (i === 1 || j === 1) {
-            this.probabilityTable[i][j] = 0.125
-          } else if (i === 5 || j === 5 || i === 2 || j === 2 || i === 10 || j === 10) {
-            this.probabilityTable[i][j] = 0.25
+
+          } else {
+            if (i === 0 || j === 0) {
+              if (this.operator === '/') {
+                this.probabilityTable[i][j] = 0
+              } else {
+                this.probabilityTable[i][j] = 0.0625
+              }
+            } else if (i === 1 || j === 1) {
+              this.probabilityTable[i][j] = 0.125
+            } else if (i === 5 || j === 5 || i === 2 || j === 2 || i === 10 || j === 10) {
+              this.probabilityTable[i][j] = 0.25
+            }
           }
         }
       }
