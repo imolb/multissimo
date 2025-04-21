@@ -382,8 +382,17 @@ class Training {
     }
   }
 
-  correctAnswer (task) {
-    this.probabilityTable[task.index1][task.index2] /= 2
+  correctAnswer (task, timePerTask) {
+    let divider = 1
+    if (task.taskDuration() < timePerTask) {
+      divider = 2
+    } else if (task.taskDuration() < 1.5 * timePerTask) {
+      divider = 1.5
+    } else {
+      divider = 1.2
+    }
+
+    this.probabilityTable[task.index1][task.index2] /= divider
     this.points.correctAnswer()
   }
 
@@ -445,6 +454,7 @@ class Task {
     this.number2 = number2
     this.result = answer
     this.isAnswered = false
+    this.startTime = Date.now()
   }
 
   taskText () {
@@ -457,6 +467,10 @@ class Task {
 
   taskTextWithAnswer () {
     return this.taskText() + this.result
+  }
+
+  taskDuration () {
+    return (Date.now() - this.startTime) / 1000
   }
 }
 
@@ -553,6 +567,10 @@ class Challenge {
 
     this.updateCountdown()
     this.updateAnswersCounter()
+  }
+
+  timePerTask () {
+    return this.timeLimit / this.answerLimit;
   }
 
   correctAnswer () {
@@ -777,7 +795,7 @@ function checkAnswer () {
   let challengeWon = false
   if (parseInt(answer) === task.result) {
     ratingClass = 'correct'
-    userManagement.user.training.correctAnswer(task)
+    userManagement.user.training.correctAnswer(task, challenge.timePerTask())
     taskText = taskText + ' ✔'
     document.querySelector('#playContent').setAttribute('class', 'correct')
     timeout = 1000
