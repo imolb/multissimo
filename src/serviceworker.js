@@ -3,7 +3,7 @@
 /**
  * serviceworker.js
  *
- * Last update: 04.05.2025 09:56
+ * Last update: 21.04.2025 17:47
  */
 
 /* global self caches */
